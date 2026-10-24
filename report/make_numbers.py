@@ -127,6 +127,26 @@ def main() -> None:
         "CorrWordsSkillsJob": eda.get("corr_jobs", {}).get("words", {}).get("skills", 0),
         "CorrWordsSkillsRes": eda.get("corr_resume", {}).get("words", {}).get("skills", 0),
     }
+    live, ats = load("live_pool"), load("ats_baseline")
+    open_n = live.get("open", 0)
+    m.update({
+        "LiveAsOf": live.get("as_of", "")[:10],
+        "LiveOpen": open_n,
+        "LiveExpired": live.get("expired", 0),
+        "LiveWeek": live.get("closing_within_7_days", 0),
+        "LiveMedDays": live.get("median_days_left") or 0,
+        "LiveIT": live.get("open_by_category", {}).get("INFORMATION-TECHNOLOGY", 0),
+        "LiveITPct": round(100 * live.get("open_by_category", {}).get("INFORMATION-TECHNOLOGY", 0)
+                           / max(open_n, 1)),
+        "LiveYearsPct": round(100 * (live.get("open_with_years_required") or 0), 1),
+        "AtsPos": ats.get("mean_score_by_type", {}).get("positive", 0),
+        "AtsHard": ats.get("mean_score_by_type", {}).get("hard_negative", 0),
+        "AtsRand": ats.get("mean_score_by_type", {}).get("random_negative", 0),
+        "AtsAucHard": ats.get("auc_pos_vs_hard", 0),
+        "AtsAucRand": ats.get("auc_pos_vs_random", 0),
+        "AtsTestPairs": ats.get("test_pairs", 0),
+        "RozeeRobotsBlocked": "yes" if rz.get("robots_txt_blocked") else "no",
+    })
     g = eda.get("rozee_gender_preference", {})
     m["RozeeMale"], m["RozeeFemale"] = g.get("Male", 0), g.get("Female", 0)
     m["RozeeGendered"] = g.get("Male", 0) + g.get("Female", 0)

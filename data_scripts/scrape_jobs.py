@@ -10,7 +10,8 @@ Policy:
   * Job details are read from the schema.org JobPosting JSON-LD block on each page.
 
 Usage:
-    python data_scripts/scrape_jobs.py --max-jobs 400
+    python data_scripts/scrape_jobs.py --max-jobs 400            # initial collection
+    python data_scripts/scrape_jobs.py --refresh --max-jobs 150  # top up the open-jobs pool
 """
 from __future__ import annotations
 
@@ -61,6 +62,8 @@ class PoliteSession:
             self.robots.parse(r.text.splitlines())
         else:
             self.robots.disallow_all = True
+            self._log(f"robots.txt HTTP {r.status_code}; treating the whole site as disallowed")
+            print(f"[robots] robots.txt returned HTTP {r.status_code}; not crawling")
 
     def get(self, url: str) -> str | None:
         if not self.robots.can_fetch(USER_AGENT, url):
@@ -195,22 +198,30 @@ def main() -> None:
     ap.add_argument("--delay", type=float, default=2.0)
     ap.add_argument("--per-query", type=int, default=15, help="max new postings per query")
     ap.add_argument("--stats-only", action="store_true", help="recompute stats, no requests")
+    ap.add_argument("--refresh", action="store_true",
+                    help="collect up to --max-jobs NEW postings, queries with fewest open postings first")
     args = ap.parse_args()
     if args.stats_only:
         write_stats()
         return
 
-    done, covered = set(), set()
+    done: set[str] = set()
+    open_by_query: dict[str, int] = {q: 0 for q in QUERIES}
+    now = datetime.now(timezone.utc)
     if OUT.exists():
         for line in OUT.open():
             rec = json.loads(line)
             done.add(rec["job_id"])
-            covered.add(rec["query"])
+            closes = pd.to_datetime(rec.get("valid_through"), utc=True, errors="coerce")
+            still_open = pd.notna(closes) and closes >= now
+            if rec["query"] in open_by_query and (still_open or not args.refresh):
+                open_by_query[rec["query"]] += 1
+    limit = len(done) + args.max_jobs if args.refresh else args.max_jobs
     sess = PoliteSession(args.delay)
 
     queue: dict[str, tuple[str, str]] = {}
     searched = 0
-    for q in sorted(QUERIES, key=lambda q: q in covered):
+    for q in sorted(QUERIES, key=lambda q: open_by_query[q]):
         searched += 1
         added = 0
         for jid, url in search_urls(sess, q, args.pages).items():
@@ -218,12 +229,12 @@ def main() -> None:
                 queue[jid] = (url, q)
                 added += 1
         print(f"[search] {q!r}: +{added} queue={len(queue)}")
-        if len(queue) + len(done) >= args.max_jobs:
+        if len(queue) + len(done) >= limit:
             break
 
     n_ok = n_fail = 0
     with OUT.open("a") as f:
-        for jid, (url, q) in list(queue.items())[: max(0, args.max_jobs - len(done))]:
+        for jid, (url, q) in list(queue.items())[: max(0, limit - len(done))]:
             html = sess.get(url)
             rec = parse_job(html, url, q) if html else None
             if rec:
@@ -251,7 +262,8 @@ def write_stats(run: dict | None = None) -> None:
         "queries_defined": len(QUERIES),
         "queries_covered_total": int(df["query"].nunique()),
         "postings_by_query": df["query"].value_counts().to_dict(),
-        "requests_logged": len(log),
+        "requests_logged": sum(re.match(r"\S+ (\d{3}|error) ", l) is not None for l in log),
+        "robots_txt_blocked": any("robots.txt HTTP" in l for l in log[-60:]),
         "requests_blocked_403_429": sum(" 403 " in l or " 429 " in l for l in log),
         "robots_disallowed": sum("robots-disallowed" in l for l in log),
         "user_agent": USER_AGENT,

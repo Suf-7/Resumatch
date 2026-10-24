@@ -24,9 +24,10 @@
     "hr": 4,
     "sales": 1
   },
-  "requests_logged": 556,
+  "requests_logged": 555,
+  "robots_txt_blocked": true,
   "requests_blocked_403_429": 87,
-  "robots_disallowed": 1,
+  "robots_disallowed": 34,
   "user_agent": "ResumatchAcademicBot/0.1 (FAST-NUCES Lahore AI semester project; non-commercial; respects robots.txt)",
   "top_cities": {
     "Lahore": 140,

@@ -50,6 +50,9 @@ def load_linkedin() -> pd.DataFrame:
         "salary_yearly": sal * mult,
         "currency": j["currency"],
         "skills_listed": j["skills_desc"],
+        "url": j["application_url"].fillna(j["job_posting_url"]),
+        "date_posted": pd.to_datetime(j["listed_time"], unit="ms", utc=True),
+        "valid_through": pd.to_datetime(j["expiry"], unit="ms", utc=True),
         "raw_text": np.where(extra.str.len() > 0, desc + "\n\nSkills: " + extra, desc),
     })
 
@@ -78,6 +81,9 @@ def load_rozee() -> pd.DataFrame:
         "skills_listed": skills.replace("", np.nan),
         "experience_text": r.get("experience_text"),
         "gender_preference": r.get("gender_preference"),
+        "url": r["url"],
+        "date_posted": pd.to_datetime(r["date_posted"], utc=True, errors="coerce"),
+        "valid_through": pd.to_datetime(r["valid_through"], utc=True, errors="coerce"),
         "raw_text": np.where(skills.str.len() > 0,
                              r["description_html"].fillna("") + "\n\nSkills: " + skills,
                              r["description_html"].fillna("")),
@@ -87,6 +93,9 @@ def load_rozee() -> pd.DataFrame:
 def main() -> None:
     steps = {}
     df = pd.concat([load_linkedin(), load_rozee()], ignore_index=True)
+    # newest closing date first, so deduplication keeps the posting that is still open
+    df = df.sort_values("valid_through", ascending=False, na_position="last", kind="stable")
+    df = df.reset_index(drop=True)
     steps["loaded"] = len(df)
     steps["loaded_by_source"] = df["source"].value_counts().to_dict()
     steps["missing_share_raw"] = df.isna().mean().round(3).to_dict()
@@ -143,7 +152,7 @@ def main() -> None:
 
     keep = ["job_id", "source", "title", "company", "location", "country", "seniority",
             "seniority_raw", "work_type", "remote", "salary_yearly", "currency", "skills_listed",
-            "text", "n_words", "length_flag", "en_ratio"]
+            "text", "n_words", "length_flag", "en_ratio", "url", "date_posted", "valid_through"]
     keep += [c for c in ("experience_text", "gender_preference") if c in df.columns]
     out = df[keep]
     out.to_parquet(INTERIM / "jobs_clean.parquet", index=False)

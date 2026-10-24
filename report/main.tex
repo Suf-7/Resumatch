@@ -76,8 +76,9 @@ Hanan Ishaque & 24L-2537 / BSDS-5B\\
 % ---------------------------------------------------------------- 1
 \section{Introduction}
 Resumatch is a web application that matches resumes and job postings in both directions.
-Job seekers upload a CV and receive ranked job recommendations, an ATS-style compatibility
-score, a skill-gap report, and rewritten resume bullets. Recruiters upload a job description
+A job seeker uploads a CV and receives the three best-matching \emph{open} job postings they
+can apply to. Each comes with a direct apply link, an ATS-style score for that specific posting,
+the matched and missing skills, and suggested rewrites of weak resume bullets. Recruiters upload a job description
 together with a batch of CVs and receive a ranked, explained shortlist. The matching, ranking,
 and skill-extraction components are models we train or fine-tune ourselves; external LLM APIs
 are used only in supporting roles (pre-labelling, synthetic data generation, and
@@ -154,8 +155,10 @@ similar to the resume as true same-occupation \emph{positives} (mean TF-IDF cosi
 construction (AUC \AucTfidf). The independent, off-the-shelf MiniLM sentence encoder does only
 slightly better, at AUC \AucEmb, barely above chance. Telling the right role from a
 similar-sounding wrong one therefore needs encoders fine-tuned on our pairs, which is the Phase~3
-plan. Machine learning also allows measurement: precision@$k$, NDCG, and bias tests can be
-computed for a trained model and compared against keyword baselines.
+plan. Our keyword-style baseline ATS score (Section~\ref{sec:features}) shows the same pattern:
+it separates positives from random negatives (AUC \AtsAucRand) but not from hard negatives
+(AUC \AtsAucHard). Machine learning also allows measurement: precision@$k$, NDCG, and bias
+tests can be computed for a trained model and compared against keyword baselines.
 
 % ---------------------------------------------------------------- 5
 \section{Proposed System and Features}
@@ -165,14 +168,13 @@ computed for a trained model and compared against keyword baselines.
 \toprule
 \# & Feature & Description & Core model\\
 \midrule
-1 & Match score & Score and explanation for one CV versus one job & Cross-encoder\\
-2 & Skill-gap report & Skills present, missing, and a suggested learning order & Skill NER + ESCO\\
-3 & Job ranking & Top-$N$ jobs from the dataset for an uploaded CV & Fine-tuned bi-encoder\\
+1 & Top-3 job matches & The three best \emph{open} postings for an uploaded CV, each with an apply link & Bi-encoder + reranker\\
+2 & Per-job ATS score & 0--100 score for each recommended posting: skill coverage, experience fit, title match, resume structure & Skill NER + learned weights\\
+3 & Skill-gap report & Matched and missing skills per posting, with a suggested learning order & Skill NER + ESCO\\
 4 & Candidate ranking & Ranked shortlist of CVs for one job (recruiter mode) & Bi-encoder + reranker\\
-5 & ATS score & Section completeness, keyword coverage, formatting & Feature-based model\\
-6 & Bullet rewriter & Rewrites weak CV lines for a target job & LLM (API)\\
-7 & Skill normalization & Maps variants to a standard skill taxonomy & NER + ESCO mapping\\
-8 & Evaluation \& bias dashboard & Metrics, baselines, counterfactual bias tests & ---\\
+5 & Bullet rewriter & Rewrites weak CV lines for a target job & LLM (API)\\
+6 & Skill normalization & Maps variants to a standard skill taxonomy & NER + ESCO mapping\\
+7 & Evaluation \& bias dashboard & Metrics, baselines, counterfactual bias tests & ---\\
 \bottomrule
 \end{tabularx}
 \caption{Planned features and the model behind each.}
@@ -199,21 +201,53 @@ computed for a trained model and compared against keyword baselines.
 \caption{Data pipeline. Solid boxes are implemented in this deliverable; model training is Phase~3.}
 \end{figure}
 
+\paragraph{Job-seeker flow.} The user uploads a resume, and the system extracts its text,
+skills and years of experience. The candidates are only postings that are still open and have
+an apply link: the open-jobs pool (Section~\ref{sec:collection}). The bi-encoder retrieves the
+closest postings from this pool, and the reranker orders them. For each of the top three, the
+user sees the posting details, closing date, apply link, ATS score and skill gap. Postings past
+their closing date are never shown.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.55cm,
+  box/.style={draw=rmblue,very thick,rounded corners=3pt,fill=rmblue!6,align=center,
+              minimum height=1.25cm,text width=2.25cm,font=\small},
+  done/.style={box},
+  todo/.style={box,draw=rmgrey,fill=rmgrey!5,dashed},
+  arr/.style={-{Stealth[length=2.2mm]},thick,rmgrey}]
+\node[done] (up) {Resume upload\\\scriptsize text, skills, years};
+\node[done,right=of up] (pool) {Open-jobs pool\\\scriptsize Rozee.pk, not expired};
+\node[todo,right=of pool] (ret) {Retrieve +\\rerank\\\scriptsize (Phase 3)};
+\node[done,right=of ret] (ats) {Per-job ATS score\\\scriptsize + skill gap};
+\node[todo,right=of ats] (ui) {Top 3 with\\apply links\\\scriptsize (Phase 5)};
+\draw[arr] (up) -- (pool);
+\draw[arr] (pool) -- (ret);
+\draw[arr] (ret) -- (ats);
+\draw[arr] (ats) -- (ui);
+\end{tikzpicture}
+\caption{Job-seeker flow. Solid boxes have a working baseline in this deliverable; dashed boxes
+come in later phases.}
+\end{figure}
+
 \paragraph{Role of external APIs.} Pretrained LLM APIs are used to (i) pre-label CV--job pairs
 and generate synthetic CVs for training data, (ii) act as a zero-shot baseline in the
 evaluation, and (iii) produce user-facing explanations and rewrites. The retrieval (bi-encoder
 \cite{sbert}), reranking (cross-encoder \cite{monobert}) and skill-extraction models are our own
 fine-tuned models. Every API call is logged.
 
-\paragraph{Success criteria.} Job and candidate ranking: NDCG@10 and precision@5 on the human
-gold set, compared with BM25/TF-IDF and zero-shot LLM baselines. Skill extraction: span-level
+\paragraph{Success criteria.} Job recommendation: precision@3 and NDCG@10 on the human gold
+set, compared with BM25/TF-IDF and zero-shot LLM baselines; candidate ranking is evaluated the
+same way. ATS score: rank correlation with the human fit labels (gold set and the external
+\emph{No / Potential / Good Fit} pairs), and better than the baseline score in
+Section~\ref{sec:features}. Skill extraction: span-level
 F1 against the ESCO dictionary baseline. Bias: change in score under counterfactual swaps of
 name, gender, and university should be statistically indistinguishable from zero.
 
 \phase{Phase 2: Data Acquisition \& Preprocessing}
 
 % ---------------------------------------------------------------- 6
-\section{Data Collection}
+\section{Data Collection}\label{sec:collection}
 \begin{table}[H]
 \centering\small
 \begin{tabularx}{\linewidth}{@{}L L l r r@{}}
@@ -222,8 +256,8 @@ Source & Content & Method & Raw & Clean\\
 \midrule
 Kaggle \emph{Resume Dataset} \cite{kaggle-resume} & Resume text, 24 job categories & Download & \ResRawMain & \ResFinalMain\\
 Kaggle \emph{Updated Resume Dataset} \cite{kaggle-resume2} & Resume text, 25 tech-heavy categories & Download & \ResRawUpd & \ResFinalUpd\\
-Kaggle \emph{LinkedIn Job Postings} \cite{kaggle-linkedin} & Title, description, location, level, salary & Download & \JobRawLI & \JobFinalLI\\
-Rozee.pk postings & Pakistan-based postings incl.\ skills tags, career level, city & Python scraping & \JobRawRZ & \JobFinalRZ\\
+Kaggle \emph{LinkedIn Job Postings} \cite{kaggle-linkedin} & Title, description, location, level, salary; closed in 2023--24, so training only & Download & \JobRawLI & \JobFinalLI\\
+Rozee.pk postings & Current Pakistan-based postings incl.\ skills tags, career level, city, apply URL and closing date & Python scraping & \JobRawRZ & \JobFinalRZ\\
 ESCO v1.1.2 skills \cite{esco} & \EscoSkills skills, \EscoAlt alternative labels & Download (CSV) & \EscoSkills & ---\\
 Resume--JD fit pairs \cite{hf-fit} & Human-labelled \emph{No / Potential / Good Fit} pairs & Download & \FitPairsTrain\,+\,\FitPairsTest & held out\\
 Synthetic CVs & LLM-generated CVs for under-represented roles & API calls (logged) & \multicolumn{2}{r}{script ready}\\
@@ -250,10 +284,21 @@ each page rather than brittle HTML selectors. Postings were collected for \Rozee
 \RozeeQueriesDefined planned search queries (software, data, design, finance, banking, marketing,
 HR and sales). When the site began rate-limiting (\RozeeBlocked of \RozeeRequests requests
 answered HTTP~403), the scraper backed off and, after five consecutive blocks, stopped as the
-policy requires. The remaining queries (engineering, healthcare, education, internships) are
-prioritized automatically on the next run, so the current Pakistani sample is tech-heavy. All requests are
-logged to \code{logs/scrape\_rozee.log}. Data is used for academic purposes only; if a site
-disallows scraping we rely on Kaggle data for that segment.
+policy requires, so the current Pakistani sample is tech-heavy. On a refresh attempt on
+\LiveAsOf, Rozee.pk answered the request for \code{robots.txt} itself with HTTP~403. The
+scraper treats this as the whole site being disallowed and made no further requests; we do not
+work around blocks (for example, by changing the user agent). All requests are logged to
+\code{logs/scrape\_rozee.log}. Data is used for academic purposes only.
+
+\paragraph{Open-jobs pool.} Users are only matched against postings they can
+still apply to. \code{live\_pool.py} keeps the Rozee.pk postings that have an apply URL and
+whose closing date has not passed, and stores them with their skills, required years and
+embedding. LinkedIn postings closed in 2023--24 and are excluded automatically by the same
+date check; they remain training data. On \LiveAsOf the pool holds \LiveOpen open postings,
+but they close quickly: \LiveWeek close within seven days (median \LiveMedDays days left), and
+\LiveITPct\% are IT roles. The pool therefore has to be refreshed every few days
+(\code{make refresh} scrapes new postings, then reruns cleaning, features and the pool). Because Rozee.pk currently blocks our crawler, Section~\ref{sec:risks} lists the
+alternatives we are pursuing.
 
 \paragraph{Gold set.} \code{sample\_gold\_set.py} draws 200 pairs \emph{only from the test
 split} (50\% positives, 30\% hard negatives, 20\% random negatives; pair type hidden from
@@ -282,6 +327,9 @@ Noise & Strip HTML tags and entities, URLs, EEO/legal boilerplate, non-printable
 Non-English & Stop-word ratio test (English vs.\ Spanish/French/German/Portuguese) & $-$\ResNonEn & $-$\JobNonEn\\
 Exact duplicates & SHA-1 hash of normalized text & $-$\ResExactDup & $-$\JobExactDup\\
 Near-duplicates & TF-IDF cosine similarity $>0.95$ (reposted postings, copied CV templates) & $-$\ResNearDup & $-$\JobNearDup\\
+Closing dates & Keep apply URL, posting and closing dates. Postings are sorted by closing date
+first, so deduplication keeps the copy that is still open; closed postings stay in the
+training data but never enter the open-jobs pool & --- & \LiveOpen open\\
 Outliers & Flag below 1st / above 99th percentile of word count (IQR fences as cross-check:
 \ResIQR / \JobIQR flagged). Drop clear junk (resumes $<$50, postings $<$30 words); truncate long texts at the 99th percentile & $-$\ResJunk; \ResLong capped & $-$\JobJunk; \JobLong capped\\
 Personal data & Replace emails, phone numbers, URLs and street addresses with
@@ -318,8 +366,9 @@ same 24 categories by ordered rules, covering \JobCatCov\% of postings) are labe
 shared label space; skills are multi-hot encoded (\code{MultiLabelBinarizer}) over a vocabulary
 of \SkillVocab ESCO skills seen in at least five training documents.
 \item \textbf{Numeric features:} text length, number of skills, and years of experience. Years
-are extracted by regex from explicit mentions (``5+ years of experience'') or, for resumes, from
-the span of dated job entries, with ``Current'' anchored to the collection year of the source
+are extracted by regex from explicit mentions (``5+ years of experience''). For postings,
+Rozee.pk's structured experience field (``3 Years -- 5 Years'') is the fallback; for resumes,
+the span of dated job entries is, with ``Current'' anchored to the collection year of the source
 (\RefYear) rather than today (coverage: \YearsCovRes\% of resumes, \YearsCovJob\% of postings).
 Heavy-tailed counts are log-transformed, missing years get a train-median value plus a missing
 indicator, and all are standardized with \code{StandardScaler}.
@@ -331,9 +380,20 @@ category; one random different-category posting is added. This gives \Pairs pair
 (not by pair), stratified by category, and pairs are only formed within a split, so no resume
 or posting leaks across splits. Resumes: \ResTrain / \ResVal / \ResTest. Postings: \JobTrain /
 \JobVal / \JobTest. Pairs: \PairsTrain / \PairsVal / \PairsTest.
+\item \textbf{Per-job ATS score (baseline):} \code{ats\_score.py} scores one resume against one
+posting from 0 to 100 as a weighted mean of four components: skill coverage (share of the
+posting's ESCO skills found in the resume, weight 0.50), experience fit (resume years divided by
+required years, capped at 1, weight 0.20), title match (share of the posting title's content
+words found in the resume, 0.15) and resume structure (contact details, experience, education
+and skills sections present, 0.15). A component the posting does not specify, such as required
+years, is left out and the remaining weights are rescaled. The missing skills
+form the skill-gap report. On the \AtsTestPairs test pairs the mean score is \AtsPos for positives,
+\AtsHard for hard negatives and \AtsRand for random negatives. Phase~3 replaces the skill
+component with the NER model and learns the weights from the gold set.
 \end{itemize}
 
 % ---------------------------------------------------------------- 9
+\clearpage
 \section{Exploratory Data Analysis}\label{sec:eda}
 All charts are produced by \code{data\_scripts/eda.py} on the cleaned data.
 
@@ -404,7 +464,7 @@ for the Phase~4 bias analysis and never use it as a model input.
 \begin{verbatim}
 resumatch/
 |-- README.md               # setup, pipeline, data sources
-|-- Makefile                # make data scrape clean features eda gold report
+|-- Makefile                # pipeline targets; make refresh updates the job pool
 |-- requirements.txt
 |-- .env.example            # LLM / Kaggle keys (real .env is git-ignored)
 |-- .gitignore              # excludes raw data, models, API keys, API cache
@@ -420,6 +480,8 @@ resumatch/
 |   |-- clean_jobs.py
 |   |-- skills.py           # ESCO gazetteer: extraction + normalization
 |   |-- build_features.py   # features, splits, pairs, embeddings
+|   |-- live_pool.py        # open, applyable postings users are matched against
+|   |-- ats_score.py        # baseline per-job ATS score + skill gap
 |   |-- sample_gold_set.py  # gold set sampling + Cohen's kappa
 |   `-- eda.py
 |-- data/                   # raw/ interim/ processed/ gold/ (git-ignored)
@@ -442,6 +504,9 @@ Rozee.pk scraper with robots.txt, rate limiting and logging & Done (\JobRawRZ po
 Cleaning, anonymization, deduplication, outlier handling & Done\\
 Skill gazetteer, TF-IDF, multi-hot, numeric features, MiniLM embeddings & Done\\
 Leakage-free splits and \Pairs weakly labelled pairs & Done\\
+Open-jobs pool with apply URLs and closing dates & Done (\LiveOpen open on \LiveAsOf)\\
+Baseline per-job ATS score and skill gap & Done (Phase~3 replaces it)\\
+Regular Rozee.pk refresh (\code{make refresh}) & Blocked by robots.txt\\
 EDA figures & Done\\
 Synthetic CVs and LLM pair labels (scripts and logging ready) & Pending API key\\
 Gold set: 200 pairs sampled; double annotation and $\kappa$ & Pending manual labelling\\
@@ -451,14 +516,15 @@ Gold set: 200 pairs sampled; double annotation and $\kappa$ & Pending manual lab
 \end{table}
 
 % ---------------------------------------------------------------- 12
-\section{Risks and Mitigations}
+\section{Risks and Mitigations}\label{sec:risks}
 \begin{table}[H]
 \centering\small
-\begin{tabularx}{\linewidth}{@{}l L@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{4.6cm} L@{}}
 \toprule
 Risk & Mitigation\\
 \midrule
-Scraping blocked or disallowed & robots.txt checked per URL; fall back to Kaggle postings; keep the scraper limited to permitted pages.\\
+Open-jobs pool goes stale (Rozee.pk currently blocks our crawler) & Never show closed postings. Ask Rozee.pk for permission or a data feed; evaluate official job-search APIs and other Pakistani job boards that allow automated access; refresh every few days once a source is available. Until then, the Rozee.pk postings stay in the data for training and evaluation.\\
+Pool is tech-heavy (\LiveITPct\% IT) & Broaden queries to the uncovered categories once crawling is allowed; show the score honestly so weak matches look weak.\\
 Noisy weak / LLM labels & Hand-verify a sample, report agreement, and keep the gold test set human-labelled.\\
 Small or imbalanced resume data & Synthetic CVs for rare roles, class weighting, stratified splits.\\
 Domain gap (US, senior CVs vs.\ Pakistani graduates) & Rozee.pk postings, synthetic entry-level CVs, separate evaluation on local data.\\

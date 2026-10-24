@@ -125,6 +125,17 @@ def required_years(text: str) -> float:
     return float(min(vals)) if vals else np.nan
 
 
+_LISTED = re.compile(r"(\d{1,2})\s*(?:\+|plus)?\s*(?:(?:-|–|to)\s*\d{1,2}\s*)?(years?|yrs?|months?)", re.I)
+
+
+def listed_years(field) -> float:
+    """Minimum years from a structured experience field such as '3 Years - 5 Years'."""
+    m = _LISTED.search(str(field or ""))
+    if not m:
+        return np.nan
+    return 0.0 if m.group(2).lower().startswith("month") else float(min(int(m.group(1)), 25))
+
+
 # --------------------------------------------------------------------------- #
 # TF-IDF normalization (baseline only; transformer inputs keep raw casing)
 # --------------------------------------------------------------------------- #
@@ -211,6 +222,8 @@ def main() -> None:
     stats["resume_reference_year"] = ref_years
     res["years_exp"] = [resume_years(t, ref_years[s]) for t, s in zip(res["text"], res["source"])]
     jobs["years_required"] = jobs["text"].map(required_years)
+    if "experience_text" in jobs:
+        jobs["years_required"] = jobs["years_required"].fillna(jobs["experience_text"].map(listed_years))
     jobs["job_category"] = jobs["title"].map(job_category)
     stats["years_exp_coverage_resumes"] = round(float(res["years_exp"].notna().mean()), 3)
     stats["years_required_coverage_jobs"] = round(float(jobs["years_required"].notna().mean()), 3)

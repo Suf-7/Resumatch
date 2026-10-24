@@ -1,0 +1,37 @@
+{
+  "as_of": "2026-10-24T15:27:02.179267+00:00",
+  "candidates": 348,
+  "open": 348,
+  "expired": 0,
+  "missing_url_or_date": 0,
+  "closing_within_7_days": 340,
+  "median_days_left": 4.1,
+  "open_with_years_required": 0.655,
+  "open_mean_skills": 8.74,
+  "open_by_category": {
+    "INFORMATION-TECHNOLOGY": 170,
+    "ACCOUNTANT": 42,
+    "unknown": 27,
+    "ENGINEERING": 25,
+    "DESIGNER": 21,
+    "FINANCE": 21,
+    "DIGITAL-MEDIA": 15,
+    "CONSULTANT": 14,
+    "BANKING": 4,
+    "HR": 3,
+    "SALES": 2,
+    "BUSINESS-DEVELOPMENT": 2,
+    "HEALTHCARE": 1,
+    "CONSTRUCTION": 1
+  },
+  "open_by_city": {
+    "Lahore": 137,
+    "Karachi": 67,
+    "unknown": 54,
+    "Islamabad": 40,
+    "Sindh": 20,
+    "Faisalabad": 10,
+    "Peshawar": 5,
+    "Rawalpindi": 5
+  }
+}

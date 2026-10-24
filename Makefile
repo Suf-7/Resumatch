@@ -1,7 +1,7 @@
 PY ?= .venv/bin/python
 S = data_scripts
 
-.PHONY: setup data scrape synthetic clean features label eda gold report all
+.PHONY: setup data scrape refresh synthetic clean features live ats label eda gold report all
 
 setup:
 	python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
@@ -21,6 +21,16 @@ clean:
 features:
 	cd $(S) && ../$(PY) build_features.py --embeddings
 
+live:             ## open, applyable Rozee.pk postings users are matched against
+	cd $(S) && ../$(PY) live_pool.py
+
+ats:              ## baseline ATS score sanity check on the test pairs
+	cd $(S) && ../$(PY) ats_score.py evaluate
+
+refresh:          ## run every few days: Rozee.pk postings close within about a week
+	cd $(S) && ../$(PY) scrape_jobs.py --refresh --max-jobs 150
+	$(MAKE) clean features live
+
 label:            ## needs LLM_API_KEY in .env
 	cd $(S) && ../$(PY) label_pairs.py --n 2000
 
@@ -33,4 +43,4 @@ gold:
 report:
 	$(PY) report/make_numbers.py && $(PY) report/build_pdf.py
 
-all: data scrape clean features eda gold report
+all: data scrape clean features live ats eda gold report

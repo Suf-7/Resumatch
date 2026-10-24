@@ -2,7 +2,7 @@
 
 **AI-powered resume ↔ job matching.** AI semester project, FAST-NUCES Lahore (Track A: Application Development).
 
-Job seekers upload a CV and get ranked job recommendations, an ATS-style score, a skill-gap report, and rewritten bullets. Recruiters upload a job description plus a batch of CVs and get a ranked, explained shortlist. The retrieval, ranking, and skill-extraction models are our own trained or fine-tuned models. LLM APIs are used only for labelling, synthetic data, and explanations.
+A job seeker uploads a CV and gets the **top 3 open job postings** they can apply to. Each one comes with an apply link, an ATS-style score for that posting, matched and missing skills, and suggested bullet rewrites. Recruiters upload a job description plus a batch of CVs and get a ranked, explained shortlist. The retrieval, ranking, and skill-extraction models are our own trained or fine-tuned models. LLM APIs are used only for labelling, synthetic data, and explanations.
 
 | Deliverable | Scope | Status |
 |---|---|---|
@@ -19,6 +19,8 @@ cp .env.example .env             # optional: LLM_API_KEY for synthetic CVs / pai
 make data                        # Kaggle datasets (HF mirrors if no Kaggle creds) + ESCO
 make scrape                      # Rozee.pk postings (robots.txt-aware, 2 s delay)
 make clean features eda          # cleaning -> features/pairs/embeddings -> figures
+make live ats                    # open-jobs pool + baseline ATS score check
+make refresh                     # every few days: new Rozee.pk postings -> rebuilt pool
 make gold                        # sample 200 test pairs for manual labelling
 make report                      # make_numbers.py + build_pdf.py (headless Chrome) -> PDF
                                  # or compile report/main.tex with LaTeX / Overleaf
@@ -32,8 +34,22 @@ Run any step by hand from `data_scripts/`, for example `../.venv/bin/python clea
 download_kaggle.py ─┐
 download_esco.py   ─┤                                     ┌─> eda.py ─> report/figures
 scrape_jobs.py     ─┼─> clean_resumes.py ─┬─> build_features.py ─┼─> sample_gold_set.py
-generate_synthetic_cvs.py ─┘  clean_jobs.py ─┘                     └─> label_pairs.py (LLM)
+generate_synthetic_cvs.py ─┘  clean_jobs.py ─┘                     ├─> label_pairs.py (LLM)
+                                                                    ├─> live_pool.py (open jobs)
+                                                                    └─> ats_score.py (baseline)
 ```
+
+### Open-jobs pool (`live_pool.py`)
+Users are only matched against postings they can still apply to: Rozee.pk postings with an apply URL and a closing date that hasn't passed. They're saved to `data/processed/jobs_live.parquet` with their skills, required years and embedding row. LinkedIn postings closed in 2023–24 and are used for training only. Rozee.pk postings close within about a week, so run `make refresh` every few days. As of 2026-10-24, Rozee.pk answers our crawler's `robots.txt` request with HTTP 403, so the scraper doesn't crawl and the pool can't be refreshed until we get permission or another source.
+
+### Per-job ATS score (`ats_score.py`)
+The score runs from 0 to 100 and is a weighted mean of four components:
+- skill coverage (0.50)
+- experience fit (0.20)
+- title match (0.15)
+- resume structure (0.15)
+
+Components a posting doesn't specify are skipped, and the remaining weights are rescaled. The function also returns matched and missing skills. `ats_score.py evaluate` checks the baseline on the test pairs; results are in `report/stats/ats_baseline.json`.
 
 | Source | Script | Raw → clean |
 |---|---|---|
@@ -69,7 +85,7 @@ Each step drops or masks records, and its count is logged:
 `llm_client.py` works with any OpenAI-compatible endpoint (OpenAI, Groq, Gemini; see `.env.example`). Every call is appended to `logs/api_calls.jsonl` with prompt, model, response, usage, and timestamp, and responses are cached. Without a key, the scripts run in dry-run mode and log the prompts only.
 
 ### Scraping policy
-Each URL is checked against `robots.txt`, requests are spaced 2 s apart with a descriptive user agent, and HTTP 403 or 429 doubles the delay (up to 30 s). Only public posting text is stored, for academic use only. Requests are logged to `logs/scrape_rozee.log`.
+Each URL is checked against `robots.txt`; if `robots.txt` itself can't be fetched, the whole site is treated as disallowed. Requests are spaced 2 s apart with a descriptive user agent, and HTTP 403 or 429 doubles the delay (up to 30 s). Only public posting text is stored, for academic use only. Requests are logged to `logs/scrape_rozee.log`.
 
 ### Gold set
 `sample_gold_set.py sample` draws 200 pairs from the **test split only**. Two members label them independently, then `sample_gold_set.py score a1.csv a2.csv` reports Cohen's κ. This set is never used for training.
@@ -81,7 +97,7 @@ data_scripts/   pipeline code (see above)
 data/           raw/ interim/ processed/ gold/   (git-ignored, reproducible)
 logs/           api_calls.jsonl, scrape log
 notebooks/      exploration
-report/         LaTeX source, figures, stats, make_numbers.py
+report/         LaTeX source, figures, stats, PDF build
 app/            Phase 5 front end
 ```
 

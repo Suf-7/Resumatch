@@ -1,0 +1,44 @@
+{
+  "test_pairs": 2352,
+  "mean_score_by_type": {
+    "hard_negative": 43.3,
+    "positive": 44.7,
+    "random_negative": 31.4
+  },
+  "component_mean_by_type": {
+    "skills": {
+      "hard_negative": 0.207,
+      "positive": 0.19,
+      "random_negative": 0.066
+    },
+    "experience": {
+      "hard_negative": 0.925,
+      "positive": 0.925,
+      "random_negative": 0.916
+    },
+    "title": {
+      "hard_negative": 0.536,
+      "positive": 0.584,
+      "random_negative": 0.214
+    },
+    "structure": {
+      "hard_negative": 0.752,
+      "positive": 0.752,
+      "random_negative": 0.752
+    }
+  },
+  "component_coverage": {
+    "skills": 0.952,
+    "experience": 0.523,
+    "title": 1.0,
+    "structure": 1.0
+  },
+  "auc_pos_vs_hard": 0.519,
+  "auc_pos_vs_random": 0.726,
+  "weights": {
+    "skills": 0.5,
+    "experience": 0.2,
+    "title": 0.15,
+    "structure": 0.15
+  }
+}

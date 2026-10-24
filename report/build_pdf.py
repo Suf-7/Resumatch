@@ -213,6 +213,7 @@ class Converter:
         spec, j = find_arg(body, j)
         rows_src = body[j: body.index(f"\\end{{{env_name}}}", j)]
         spec = re.sub(r"[@>]\{[^}]*\}|\|", "", spec)
+        spec = re.sub(r"p\{[^}]*\}", "p", spec)
         aligns = [c for c in spec if c in "lcrLXp"]
         rows_src = rows_src.replace("\\toprule", "").replace("\\bottomrule", "")
         parts = re.split(r"\\midrule", rows_src)
@@ -365,7 +366,8 @@ class Converter:
                 return stash(f'<div class="phase">{self.inline(title)}</div>')
             return stash(f'<h2 id="s{num}"><span class="num">{num}</span>{self.inline(title)}</h2>')
         body = re.sub(r"\\(section|phase)\{.*?\}(\\label\{[^}]*\})?", heading, body)
-        body = re.sub(r"\\(newpage|thispagestyle\{\w+\}|clearpage)", "", body)
+        body = body.replace("\\clearpage", stash('<div style="break-after: page"></div>'))
+        body = re.sub(r"\\(newpage|thispagestyle\{\w+\})", "", body)
 
         out = []
         for para in re.split(r"\n\s*\n", body):

@@ -18,6 +18,9 @@
     "salary_yearly": 0.603,
     "currency": 0.592,
     "skills_listed": 0.981,
+    "url": 0.0,
+    "date_posted": 0.0,
+    "valid_through": 0.0,
     "raw_text": 0.0,
     "experience_text": 0.996,
     "gender_preference": 0.99
@@ -27,11 +30,11 @@
   "after_language_filter": 33574,
   "exact_duplicates": 3236,
   "after_exact_dedup": 30338,
-  "near_duplicates": 2087,
-  "after_near_dedup": 28251,
+  "near_duplicates": 2085,
+  "after_near_dedup": 28253,
   "length_bounds": {
     "p_low": 42.0,
-    "p_high": 1331.5,
+    "p_high": 1331.4799999999996,
     "iqr_low": 0.0,
     "iqr_high": 1216.5
   },
@@ -39,20 +42,20 @@
   "flagged_long": 283,
   "iqr_flagged": 532,
   "dropped_junk": 165,
-  "after_outliers": 28086,
-  "postings_with_pii_masked": 4818,
-  "final": 28086,
+  "after_outliers": 28088,
+  "postings_with_pii_masked": 4821,
+  "final": 28088,
   "final_by_source": {
-    "linkedin_kaggle": 27738,
+    "linkedin_kaggle": 27740,
     "rozee_pk_scraped": 348
   },
   "seniority": {
     "mid-senior": 9641,
-    "unknown": 7927,
-    "entry": 6282,
-    "associate": 2696,
+    "unknown": 7931,
+    "entry": 6283,
+    "associate": 2694,
     "director": 964,
-    "intern": 313,
+    "intern": 312,
     "executive": 263
   },
   "salary_available_share": 0.398
