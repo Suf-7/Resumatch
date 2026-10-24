@@ -40,7 +40,7 @@ generate_synthetic_cvs.py ─┘  clean_jobs.py ─┘                     ├�
 ```
 
 ### Open-jobs pool (`live_pool.py`)
-Users are only matched against postings they can still apply to: Rozee.pk postings with an apply URL and a closing date that hasn't passed. They're saved to `data/processed/jobs_live.parquet` with their skills, required years and embedding row. LinkedIn postings closed in 2023–24 and are used for training only. Rozee.pk postings close within about a week, so run `make refresh` every few days. As of 2026-10-24, Rozee.pk answers our crawler's `robots.txt` request with HTTP 403, so the scraper doesn't crawl and the pool can't be refreshed until we get permission or another source.
+Users are only matched against postings they can still apply to: Rozee.pk postings with an apply URL and a closing date that hasn't passed. They're saved to `data/processed/jobs_live.parquet` with their skills, required years and embedding row. LinkedIn postings closed in 2023–24 and are used for training only. Rozee.pk postings close within about a week, so run `make refresh` every few days. On 2026-10-24, Rozee.pk answered our `robots.txt` request with HTTP 403, most likely a temporary rate limit after the first run. The scraper made no requests that day and will retry later.
 
 ### Per-job ATS score (`ats_score.py`)
 The score runs from 0 to 100 and is a weighted mean of four components:

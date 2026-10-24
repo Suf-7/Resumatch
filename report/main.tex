@@ -285,9 +285,10 @@ each page rather than brittle HTML selectors. Postings were collected for \Rozee
 HR and sales). When the site began rate-limiting (\RozeeBlocked of \RozeeRequests requests
 answered HTTP~403), the scraper backed off and, after five consecutive blocks, stopped as the
 policy requires, so the current Pakistani sample is tech-heavy. On a refresh attempt on
-\LiveAsOf, Rozee.pk answered the request for \code{robots.txt} itself with HTTP~403. The
-scraper treats this as the whole site being disallowed and made no further requests; we do not
-work around blocks (for example, by changing the user agent). All requests are logged to
+\LiveAsOf, Rozee.pk answered the request for \code{robots.txt} itself with HTTP~403, most likely
+a temporary rate limit after the earlier run. The scraper treats this as the whole site being
+disallowed, made no further requests, and will retry the next day; we do not work around
+blocks (for example, by changing the user agent). All requests are logged to
 \code{logs/scrape\_rozee.log}. Data is used for academic purposes only.
 
 \paragraph{Open-jobs pool.} Users are only matched against postings they can
@@ -297,8 +298,7 @@ embedding. LinkedIn postings closed in 2023--24 and are excluded automatically b
 date check; they remain training data. On \LiveAsOf the pool holds \LiveOpen open postings,
 but they close quickly: \LiveWeek close within seven days (median \LiveMedDays days left), and
 \LiveITPct\% are IT roles. The pool therefore has to be refreshed every few days
-(\code{make refresh} scrapes new postings, then reruns cleaning, features and the pool). Because Rozee.pk currently blocks our crawler, Section~\ref{sec:risks} lists the
-alternatives we are pursuing.
+(\code{make refresh} scrapes new postings, then reruns cleaning, features and the pool). Section~\ref{sec:risks} lists the fallbacks if Rozee.pk keeps refusing access.
 
 \paragraph{Gold set.} \code{sample\_gold\_set.py} draws 200 pairs \emph{only from the test
 split} (50\% positives, 30\% hard negatives, 20\% random negatives; pair type hidden from
@@ -506,7 +506,7 @@ Skill gazetteer, TF-IDF, multi-hot, numeric features, MiniLM embeddings & Done\\
 Leakage-free splits and \Pairs weakly labelled pairs & Done\\
 Open-jobs pool with apply URLs and closing dates & Done (\LiveOpen open on \LiveAsOf)\\
 Baseline per-job ATS score and skill gap & Done (Phase~3 replaces it)\\
-Regular Rozee.pk refresh (\code{make refresh}) & Blocked by robots.txt\\
+Regular Rozee.pk refresh (\code{make refresh}) & Built; retry after rate limit\\
 EDA figures & Done\\
 Synthetic CVs and LLM pair labels (scripts and logging ready) & Pending API key\\
 Gold set: 200 pairs sampled; double annotation and $\kappa$ & Pending manual labelling\\
@@ -523,7 +523,7 @@ Gold set: 200 pairs sampled; double annotation and $\kappa$ & Pending manual lab
 \toprule
 Risk & Mitigation\\
 \midrule
-Open-jobs pool goes stale (Rozee.pk currently blocks our crawler) & Never show closed postings. Ask Rozee.pk for permission or a data feed; evaluate official job-search APIs and other Pakistani job boards that allow automated access; refresh every few days once a source is available. Until then, the Rozee.pk postings stay in the data for training and evaluation.\\
+Open-jobs pool goes stale (postings close within days; Rozee.pk rate-limits the crawler) & Never show closed postings; refresh every few days at a slow, polite rate. If access stays refused, ask Rozee.pk for permission or a data feed, or use job-search APIs and other Pakistani job boards that allow automated access. Expired postings remain useful for training and evaluation.\\
 Pool is tech-heavy (\LiveITPct\% IT) & Broaden queries to the uncovered categories once crawling is allowed; show the score honestly so weak matches look weak.\\
 Noisy weak / LLM labels & Hand-verify a sample, report agreement, and keep the gold test set human-labelled.\\
 Small or imbalanced resume data & Synthetic CVs for rare roles, class weighting, stratified splits.\\
