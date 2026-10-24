@@ -87,5 +87,5 @@ app/            Phase 5 front end
 
 ## Team
 - Muhammad Sufyan (24L-2601, BSDS-5B)
-- [Member 2]
-- [Member 3]
+- Muaaz Fahad (24L-2563, BSDS-5B)
+- Hanan Ishaque (24L-2537, BSDS-5B)
