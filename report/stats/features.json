@@ -1,0 +1,68 @@
+{
+  "resume_reference_year": {
+    "kaggle_resume_dataset": 2019,
+    "kaggle_updated_resume_dataset": 2019
+  },
+  "years_exp_coverage_resumes": 0.958,
+  "years_required_coverage_jobs": 0.469,
+  "job_category_coverage": 0.609,
+  "job_category_counts": {
+    "unknown": 10991,
+    "HEALTHCARE": 2933,
+    "INFORMATION-TECHNOLOGY": 2794,
+    "ENGINEERING": 1963,
+    "SALES": 1753,
+    "ACCOUNTANT": 1268,
+    "CONSULTANT": 1115,
+    "FINANCE": 686,
+    "DIGITAL-MEDIA": 665,
+    "HR": 615,
+    "CONSTRUCTION": 542,
+    "ADVOCATE": 498,
+    "DESIGNER": 389,
+    "BUSINESS-DEVELOPMENT": 336,
+    "BPO": 274,
+    "TEACHER": 237,
+    "BANKING": 206,
+    "AGRICULTURE": 199,
+    "CHEF": 176,
+    "AUTOMOBILE": 145,
+    "PUBLIC-RELATIONS": 125,
+    "AVIATION": 67,
+    "APPAREL": 50,
+    "ARTS": 44,
+    "FITNESS": 15
+  },
+  "resume_splits": {
+    "train": 1842,
+    "test": 395,
+    "val": 395
+  },
+  "job_splits": {
+    "train": 19660,
+    "test": 4213,
+    "val": 4213
+  },
+  "skill_vocab_size": 1169,
+  "mean_skills_resume": 7.95,
+  "mean_skills_job": 3.91,
+  "tfidf_vocab_size": 50000,
+  "pairs": 15755,
+  "pairs_by_type": {
+    "positive": 7859,
+    "hard_negative": 5264,
+    "random_negative": 2632
+  },
+  "pairs_by_split": {
+    "train": 11052,
+    "test": 2352,
+    "val": 2351
+  },
+  "pair_label_balance": 0.499,
+  "mean_cosine_by_type": {
+    "hard_negative": 0.131,
+    "positive": 0.1191,
+    "random_negative": 0.0328
+  },
+  "embeddings": "all-MiniLM-L6-v2, 384-d, L2-normalized"
+}

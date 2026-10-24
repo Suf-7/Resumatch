@@ -1,0 +1,37 @@
+{
+  "resumes_main": {
+    "file": "resumes_kaggle_snehaanbhawal.csv",
+    "rows": 2484,
+    "bytes": 56273235,
+    "kaggle_dataset": "snehaanbhawal/resume-dataset",
+    "mirror_url": "https://huggingface.co/datasets/opensporks/resumes/resolve/main/Resume/Resume.csv"
+  },
+  "resumes_updated": {
+    "file": "resumes_kaggle_gauravduttakiit.csv",
+    "rows": 962,
+    "bytes": 3064900,
+    "kaggle_dataset": "gauravduttakiit/resume-dataset",
+    "mirror_url": "https://huggingface.co/datasets/Sachinkelenjaguri/Resume_dataset/resolve/main/UpdatedResumeDataSet.csv"
+  },
+  "linkedin_jobs": {
+    "file": "jobs_linkedin_arshkon.csv",
+    "rows": 33246,
+    "bytes": 134845243,
+    "kaggle_dataset": "arshkon/linkedin-job-postings",
+    "mirror_url": "https://huggingface.co/datasets/xanderios/linkedin-job-postings/resolve/main/job_postings.csv"
+  },
+  "fit_pairs_train": {
+    "file": "pairs_resume_jd_fit_train.csv",
+    "rows": 6241,
+    "bytes": 53437783,
+    "kaggle_dataset": null,
+    "mirror_url": "https://huggingface.co/datasets/cnamuangtoun/resume-job-description-fit/resolve/main/train.csv"
+  },
+  "fit_pairs_test": {
+    "file": "pairs_resume_jd_fit_test.csv",
+    "rows": 1759,
+    "bytes": 15178234,
+    "kaggle_dataset": null,
+    "mirror_url": "https://huggingface.co/datasets/cnamuangtoun/resume-job-description-fit/resolve/main/test.csv"
+  }
+}

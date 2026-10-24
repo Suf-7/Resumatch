@@ -1,0 +1,41 @@
+# Secrets
+.env
+*.key
+kaggle.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Data and models (reproducible via data_scripts/; too large / licensed for git)
+data/raw/
+data/interim/
+data/processed/
+data/gold/*.csv
+!data/gold/.gitkeep
+models/
+*.npz
+*.npy
+*.joblib
+*.parquet
+
+# API logs can contain resume text; keep locally, share a redacted sample only
+logs/api_cache.jsonl
+logs/*.log
+
+# LaTeX build artifacts
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.synctex.gz
+report/*.fdb_latexmk
+report/*.fls
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/

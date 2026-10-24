@@ -1,0 +1,36 @@
+{
+  "loaded": 3446,
+  "loaded_by_source": {
+    "kaggle_resume_dataset": 2484,
+    "kaggle_updated_resume_dataset": 962
+  },
+  "after_drop_empty": 3445,
+  "mojibake_repaired": 38,
+  "after_language_filter": 3445,
+  "exact_duplicates_by_source": {
+    "kaggle_updated_resume_dataset": 796,
+    "kaggle_resume_dataset": 2
+  },
+  "after_exact_dedup": 2647,
+  "near_duplicates": 8,
+  "after_near_dedup": 2639,
+  "length_bounds": {
+    "p_low": 97.38,
+    "p_high": 2047.7199999999993,
+    "iqr_low": 206.0,
+    "iqr_high": 1350.0
+  },
+  "flagged_short": 27,
+  "flagged_long": 27,
+  "iqr_flagged": 222,
+  "dropped_junk": 7,
+  "after_outliers": 2632,
+  "pii_tokens_inserted": 299,
+  "resumes_with_pii_masked": 117,
+  "final": 2632,
+  "final_by_source": {
+    "kaggle_resume_dataset": 2473,
+    "kaggle_updated_resume_dataset": 159
+  },
+  "categories": 24
+}

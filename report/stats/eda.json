@@ -1,0 +1,116 @@
+{
+  "resume_imbalance_ratio": 9.91,
+  "resume_category_min": {
+    "BPO": 22
+  },
+  "resume_category_max": {
+    "INFORMATION-TECHNOLOGY": 218
+  },
+  "median_words_resume": 745,
+  "median_words_job": 444,
+  "skills_unique_jobs": 2278,
+  "skills_unique_resumes": 1505,
+  "skills_overlap": 1302,
+  "skills_jaccard": 0.525,
+  "top100_job_skills_missing_in_most_resumes": 22,
+  "corr_resume": {
+    "words": {
+      "words": 1.0,
+      "skills": 0.423,
+      "years exp.": 0.223
+    },
+    "skills": {
+      "words": 0.423,
+      "skills": 1.0,
+      "years exp.": 0.058
+    },
+    "years exp.": {
+      "words": 0.223,
+      "skills": 0.058,
+      "years exp.": 1.0
+    }
+  },
+  "corr_jobs": {
+    "words": {
+      "words": 1.0,
+      "skills": 0.477,
+      "years req.": 0.037,
+      "salary/yr": 0.103
+    },
+    "skills": {
+      "words": 0.477,
+      "skills": 1.0,
+      "years req.": 0.16,
+      "salary/yr": 0.246
+    },
+    "years req.": {
+      "words": 0.037,
+      "skills": 0.16,
+      "years req.": 1.0,
+      "salary/yr": 0.54
+    },
+    "salary/yr": {
+      "words": 0.103,
+      "skills": 0.246,
+      "years req.": 0.54,
+      "salary/yr": 1.0
+    }
+  },
+  "missing_pct_raw_linkedin": {
+    "title": 0.0,
+    "location": 0.0,
+    "description": 0.0,
+    "views": 22.1,
+    "formatted_experience_level": 27.6,
+    "applies": 51.2,
+    "max_salary": 66.6,
+    "min_salary": 66.6,
+    "remote_allowed": 85.6,
+    "med_salary": 93.3,
+    "skills_desc": 99.0
+  },
+  "auc_pos_vs_hard_tfidf_cosine": 0.396,
+  "mean_tfidf_cosine_by_type": {
+    "hard_negative": 0.131,
+    "positive": 0.119,
+    "random_negative": 0.033
+  },
+  "auc_pos_vs_hard_emb_cosine": 0.534,
+  "mean_emb_cosine_by_type": {
+    "hard_negative": 0.46399998664855957,
+    "positive": 0.4779999852180481,
+    "random_negative": 0.2770000100135803
+  },
+  "rozee_top_skills": {
+    "artificial intelligence": 103,
+    "Python (computer programming)": 97,
+    "computer science": 94,
+    "Git": 90,
+    "CI/CD": 90,
+    "SQL": 78,
+    "JavaScript": 69,
+    "DevOps": 61,
+    "Microsoft Azure": 58,
+    "work independently": 55,
+    "Microsoft Excel": 53,
+    "CSS": 53,
+    "database": 52,
+    "Amazon Web Services": 52,
+    "machine learning": 50
+  },
+  "rozee_cities": {
+    "Lahore": 137,
+    "Karachi": 67,
+    "unknown": 54,
+    "Islamabad": 40,
+    "Sindh": 20,
+    "Faisalabad": 10,
+    "Rawalpindi": 5,
+    "Peshawar": 5
+  },
+  "rozee_gender_preference": {
+    "No Preference": 340,
+    "Male": 7,
+    "Female": 1
+  }
+}

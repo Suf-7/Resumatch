@@ -1,0 +1,41 @@
+{
+  "file": "jobs_rozee_pk.jsonl",
+  "postings_total": 352,
+  "queries_defined": 33,
+  "queries_covered_total": 19,
+  "postings_by_query": {
+    "web developer": 40,
+    "software engineer": 39,
+    "python": 39,
+    "accountant": 39,
+    "devops": 35,
+    "data analyst": 34,
+    "machine learning": 30,
+    "finance": 20,
+    "graphic designer": 15,
+    "qa engineer": 11,
+    "react": 11,
+    "marketing": 8,
+    "data scientist": 6,
+    "digital marketing": 6,
+    "ui ux designer": 5,
+    "banking": 5,
+    "android": 4,
+    "hr": 4,
+    "sales": 1
+  },
+  "requests_logged": 556,
+  "requests_blocked_403_429": 87,
+  "robots_disallowed": 1,
+  "user_agent": "ResumatchAcademicBot/0.1 (FAST-NUCES Lahore AI semester project; non-commercial; respects robots.txt)",
+  "top_cities": {
+    "Lahore": 140,
+    "Karachi": 67,
+    "Islamabad": 40,
+    "632": 20,
+    "Faisalabad": 10,
+    "Rawalpindi": 5,
+    "Peshawar": 5,
+    "Gujranwala": 4
+  }
+}

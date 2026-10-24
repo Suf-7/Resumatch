@@ -1,0 +1,2 @@
+Allowed labels: ['poor', 'partial', 'good']
+good = meets most required skills and the seniority level; partial = relevant background but clear skill/seniority gaps; poor = different role or most required skills missing. Ignore name, gender, age, university prestige.

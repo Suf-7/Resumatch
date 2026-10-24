@@ -1,0 +1,59 @@
+{
+  "loaded": 33598,
+  "loaded_by_source": {
+    "linkedin_kaggle": 33246,
+    "rozee_pk_scraped": 352
+  },
+  "missing_share_raw": {
+    "job_id": 0.0,
+    "source": 0.0,
+    "title": 0.0,
+    "company": 0.0,
+    "location": 0.0,
+    "country": 0.0,
+    "seniority_raw": 0.273,
+    "seniority": 0.273,
+    "work_type": 0.0,
+    "remote": 0.0,
+    "salary_yearly": 0.603,
+    "currency": 0.592,
+    "skills_listed": 0.981,
+    "raw_text": 0.0,
+    "experience_text": 0.996,
+    "gender_preference": 0.99
+  },
+  "after_drop_empty": 33597,
+  "non_english_dropped": 23,
+  "after_language_filter": 33574,
+  "exact_duplicates": 3236,
+  "after_exact_dedup": 30338,
+  "near_duplicates": 2087,
+  "after_near_dedup": 28251,
+  "length_bounds": {
+    "p_low": 42.0,
+    "p_high": 1331.5,
+    "iqr_low": 0.0,
+    "iqr_high": 1216.5
+  },
+  "flagged_short": 280,
+  "flagged_long": 283,
+  "iqr_flagged": 532,
+  "dropped_junk": 165,
+  "after_outliers": 28086,
+  "postings_with_pii_masked": 4818,
+  "final": 28086,
+  "final_by_source": {
+    "linkedin_kaggle": 27738,
+    "rozee_pk_scraped": 348
+  },
+  "seniority": {
+    "mid-senior": 9641,
+    "unknown": 7927,
+    "entry": 6282,
+    "associate": 2696,
+    "director": 964,
+    "intern": 313,
+    "executive": 263
+  },
+  "salary_available_share": 0.398
+}

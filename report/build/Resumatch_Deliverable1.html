@@ -1,0 +1,279 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Resumatch — Deliverable 1</title><style>
+@page { size: A4; margin: 22mm 21mm 20mm 21mm;
+  @top-left { content: "Resumatch — Deliverable 1"; font: 9pt Charter, Georgia, serif; color: #4a5568; }
+  @top-right { content: "AI Semester Project, FAST-NUCES Lahore"; font: 9pt Charter, Georgia, serif; color: #4a5568; }
+  @bottom-center { content: counter(page); font: 9.5pt Charter, Georgia, serif; } }
+@page:first { @top-left { content: none; } @top-right { content: none; } @bottom-center { content: none; } }
+html { font-family: Charter, "Bitstream Charter", Georgia, serif; font-size: 10.6pt; line-height: 1.42; color: #1a202c; }
+body { margin: 0; }
+p { margin: 0.35em 0 0.55em; text-align: justify; hyphens: auto; }
+h2 { color: #2b6cb0; font-size: 13.5pt; margin: 1.15em 0 0.35em; break-after: avoid; }
+h2 .num { display: inline-block; min-width: 1.6em; }
+.phase { font-size: 16pt; font-weight: bold; color: #4a5568; border-bottom: 0.7pt solid #4a5568;
+  padding-bottom: 2pt; margin: 1.3em 0 0.4em; break-after: avoid; }
+.titlepage { height: 250mm; display: flex; flex-direction: column; align-items: center; text-align: center; break-after: page; }
+.titlepage .uni { font-size: 13pt; margin-top: 4mm; }
+.titlepage .course { font-size: 11pt; margin-top: 2mm; }
+.titlepage .name { font-size: 42pt; font-weight: bold; color: #2b6cb0; margin-top: 30mm; }
+.titlepage .sub { font-size: 16pt; margin-top: 3mm; }
+.titlepage .deliv { font-size: 13.5pt; font-weight: bold; margin-top: 18mm; }
+.titlepage .track { font-size: 11pt; margin-top: 2mm; }
+.titlepage table.auto { margin: 22mm auto 0; font-size: 11pt; }
+.titlepage .date { margin-top: auto; font-size: 13pt; }
+.toc { break-after: page; }
+.toc h2 { margin-top: 0; }
+.toc ol { list-style: none; padding-left: 0; }
+.toc li { margin: 0.25em 0; }
+.toc li.phase-item { font-weight: bold; margin-top: 0.7em; color: #4a5568; }
+.toc a { color: inherit; text-decoration: none; }
+.toc .n { display: inline-block; width: 2em; }
+table { border-collapse: collapse; width: 100%; font-size: 9.4pt; line-height: 1.3; }
+table.auto { width: auto; margin: 0 auto; }
+th, td { padding: 3pt 5pt; vertical-align: top; text-align: left; }
+thead tr { border-top: 1.2pt solid #000; border-bottom: 0.7pt solid #000; }
+tbody tr:last-child { border-bottom: 1.2pt solid #000; }
+tr.midrule { border-top: 0.7pt solid #000; }
+td.r, th.r { text-align: right; white-space: nowrap; }
+td.c, th.c { text-align: center; }
+figure, .tablewrap { margin: 0.8em 0 1em; break-inside: avoid; }
+figure img { display: block; margin: 0 auto; }
+figcaption, .caption { font-size: 9.3pt; margin-top: 0.4em; text-align: justify; }
+figcaption b, .caption b { font-weight: bold; }
+ul, ol { margin: 0.3em 0 0.6em; padding-left: 1.5em; }
+li { margin: 0.15em 0; text-align: justify; }
+code, .code { font-family: Menlo, "SF Mono", monospace; font-size: 8.6pt; }
+pre { font-family: Menlo, "SF Mono", monospace; font-size: 8.2pt; line-height: 1.32; background: #f7fafc;
+  border: 0.5pt solid #e2e8f0; padding: 8pt 10pt; break-inside: avoid; }
+.pipeline { display: flex; align-items: center; justify-content: center; gap: 0; margin: 0.6em 0 0.2em; }
+.pipeline .box { border: 1.6pt solid #2b6cb0; background: #ebf4ff; border-radius: 4pt; width: 27mm;
+  min-height: 15mm; display: flex; flex-direction: column; justify-content: center; text-align: center;
+  font-size: 9.2pt; padding: 3pt; }
+.pipeline .box small { font-size: 7.4pt; color: #4a5568; }
+.pipeline .box.todo { border-style: dashed; border-color: #4a5568; background: #f7fafc; }
+.pipeline .arrow { width: 7mm; text-align: center; color: #4a5568; font-size: 13pt; }
+.bib { font-size: 9.3pt; padding-left: 2.2em; }
+.bib li { margin: 0.3em 0; text-align: left; }
+a { color: #2b6cb0; text-decoration: none; }
+.para-title { font-weight: bold; }
+</style></head><body><div class="titlepage">
+<div class="uni">FAST National University of Computer and Emerging Sciences, Lahore</div>
+<div class="course">Artificial Intelligence — Semester Project</div>
+<div class="name">Resumatch</div>
+<div class="sub">AI-Powered Resume–Job Matching Platform</div>
+<div class="deliv">Deliverable 1: Problem Definition &amp; Data Foundations</div>
+<div class="track">Track A — Application Development</div>
+<table class="auto"><thead><tr><th>Member</th><th>Roll No. / Section</th></tr></thead><tbody><tr><td>Muhammad Sufyan</td><td>24L-2601 / BSDS-5B</td></tr><tr><td>[Member 2 name]</td><td>[Roll no. / Section]</td></tr><tr><td>[Member 3 name]</td><td>[Roll no. / Section]</td></tr></tbody></table>
+<div class="date">October 2026</div></div>
+<div class="toc"><h2>Contents</h2><ol><li><a href="#s1"><span class="n">1</span>Introduction</a></li><li class="phase-item">Phase 1: Problem Definition</li><li><a href="#s2"><span class="n">2</span>Problem Statement</a></li><li><a href="#s3"><span class="n">3</span>Target Audience</a></li><li><a href="#s4"><span class="n">4</span>AI Justification</a></li><li><a href="#s5"><span class="n">5</span>Proposed System and Features</a></li><li class="phase-item">Phase 2: Data Acquisition &amp; Preprocessing</li><li><a href="#s6"><span class="n">6</span>Data Collection</a></li><li><a href="#s7"><span class="n">7</span>Data Cleaning Implementation</a></li><li><a href="#s8"><span class="n">8</span>Feature Strategy</a></li><li><a href="#s9"><span class="n">9</span>Exploratory Data Analysis</a></li><li><a href="#s10"><span class="n">10</span>Repository Structure</a></li><li><a href="#s11"><span class="n">11</span>Status and Next Steps</a></li><li><a href="#s12"><span class="n">12</span>Risks and Mitigations</a></li><li><a href="#s13"><span class="n">13</span>Team Contribution Plan</a></li><li><a href="#refs"><span class="n"></span>References</a></li></ol></div>
+<h2 id="s1"><span class="num">1</span>Introduction</h2>
+<p>Resumatch is a web application that matches resumes and job postings in both directions.
+Job seekers upload a CV and receive ranked job recommendations, an ATS-style compatibility
+score, a skill-gap report, and rewritten resume bullets. Recruiters upload a job description
+together with a batch of CVs and receive a ranked, explained shortlist. The matching, ranking,
+and skill-extraction components are models we train or fine-tune ourselves; external LLM APIs
+are used only in supporting roles (pre-labelling, synthetic data generation, and
+natural-language explanations).</p>
+<p>This document covers Phase&nbsp;1 (Problem Definition) and Phase&nbsp;2 (Data Acquisition &amp;
+Preprocessing). Unlike a plan, every number reported in Phase&nbsp;2 was produced by the scripts in
+the project repository (<code>data_scripts/</code>) and is regenerated automatically into this report
+from <code>report/stats/*.json</code>.</p>
+<div class="phase">Phase 1: Problem Definition</div>
+<h2 id="s2"><span class="num">2</span>Problem Statement</h2>
+<p>Hiring is a two-sided matching problem that both sides handle poorly.</p>
+<p><span class="para-title">For candidates.</span>&ensp; Many applicants, especially fresh graduates, write one generic CV
+and send it everywhere, and rarely learn why they were not shortlisted. Applications are first
+screened by Applicant Tracking Systems (ATS) and by recruiters who spend very little time per
+CV, so a strong candidate can be filtered out because the resume does not surface the skills a
+posting asks for, or describes them in different words (“built REST services” versus “API
+development”).</p>
+<p><span class="para-title">For recruiters.</span>&ensp; A single posting can attract far more applications than can be
+read carefully. Keyword filters are the usual remedy, but they reward keyword stuffing and miss
+capable candidates who phrase their experience differently.</p>
+<p><span class="para-title">The gap.</span>&ensp; Existing tools are mostly either (a) simple keyword counters or (b) paid,
+closed products that give a score without explaining it. There is little transparent,
+evaluable tooling that (i) ranks in both directions, (ii) explains the specific missing skills,
+and (iii) is audited for bias against attributes such as name, gender, or university. Our own
+data (Section&nbsp;9) confirms the vocabulary problem: 976 of the
+2,278 distinct skills requested in postings never appear in any resume, and
+22 of the 100 most requested skills appear in fewer than 1% of resumes.</p>
+<h2 id="s3"><span class="num">3</span>Target Audience</h2>
+<ul><li><b>Primary:</b> students and fresh graduates applying for internships and entry-level
+roles in Pakistan, who need actionable feedback on how well their CV fits a role.</li><li><b>Secondary:</b> early-career professionals switching roles or domains who need to see
+their skill gaps.</li><li><b>Secondary:</b> recruiters and HR staff at small companies and startups without an
+enterprise ATS, who need a fast, explainable shortlist.</li><li><b>Academic:</b> the bias-audit component addresses an open research concern in
+automated hiring tools.</li></ul>
+<h2 id="s4"><span class="num">4</span>AI Justification</h2>
+<p>A rule-based system cannot solve this problem well, for four reasons:</p>
+<ol><li><b>Semantic variation.</b> The same skill appears in many surface forms (“JS”,
+“JavaScript”, “Node.js”; “ML”, “machine learning”). ESCO alone lists 99,192
+alternative labels for 13,896 skills; a keyword system needs an exhaustive and constantly
+outdated synonym list. Sentence embeddings place semantically similar text close together
+without hand-written rules.</li><li><b>Context and level.</b> “Used Python once in a course” and “led a Python team for
+three years” share a keyword but signal very different fit. A learned model can use context; a
+keyword counter cannot.</li><li><b>Skill extraction from unstructured text.</b> CVs and postings have no fixed format.
+Named-entity recognition (NER) models learn to tag skills from examples instead of relying on
+brittle regular expressions. Our dictionary baseline (Section&nbsp;8) needed a
+hand-built list of ambiguous words (“it”, “current”, “balance”, “chef”) to avoid false
+matches, which illustrates exactly this brittleness.</li><li><b>Ranking is a learned preference.</b> A “good match” combines many weak signals
+(skills, seniority, domain, experience). A trained ranker can learn their weights from labelled
+pairs; hand-set weights cannot be validated.</li></ol>
+<p><b>Evidence from our data.</b> For every resume we mined <em>hard negatives</em>:
+postings from a different occupation that are lexically close to the resume. They are as
+similar to the resume as true same-occupation <em>positives</em> (mean TF-IDF cosine 0.13 vs.
+0.12). Because hard negatives are mined with TF-IDF, that baseline is disadvantaged by
+construction (AUC 0.40). The independent, off-the-shelf MiniLM sentence encoder does only
+slightly better, at AUC 0.53, barely above chance. Telling the right role from a
+similar-sounding wrong one therefore needs encoders fine-tuned on our pairs, which is the Phase&nbsp;3
+plan. Machine learning also allows measurement: precision@<i>k</i>, NDCG, and bias tests can be
+computed for a trained model and compared against keyword baselines.</p>
+<h2 id="s5"><span class="num">5</span>Proposed System and Features</h2>
+<div class="tablewrap"><table class=""><thead><tr class=""><th class="c">#</th><th class="l">Feature</th><th class="L">Description</th><th class="l">Core model</th></tr></thead><tbody><tr class=""><td class="c">1</td><td class="l">Match score</td><td class="L">Score and explanation for one CV versus one job</td><td class="l">Cross-encoder</td></tr><tr class=""><td class="c">2</td><td class="l">Skill-gap report</td><td class="L">Skills present, missing, and a suggested learning order</td><td class="l">Skill NER + ESCO</td></tr><tr class=""><td class="c">3</td><td class="l">Job ranking</td><td class="L">Top-<i>N</i> jobs from the dataset for an uploaded CV</td><td class="l">Fine-tuned bi-encoder</td></tr><tr class=""><td class="c">4</td><td class="l">Candidate ranking</td><td class="L">Ranked shortlist of CVs for one job (recruiter mode)</td><td class="l">Bi-encoder + reranker</td></tr><tr class=""><td class="c">5</td><td class="l">ATS score</td><td class="L">Section completeness, keyword coverage, formatting</td><td class="l">Feature-based model</td></tr><tr class=""><td class="c">6</td><td class="l">Bullet rewriter</td><td class="L">Rewrites weak CV lines for a target job</td><td class="l">LLM (API)</td></tr><tr class=""><td class="c">7</td><td class="l">Skill normalization</td><td class="L">Maps variants to a standard skill taxonomy</td><td class="l">NER + ESCO mapping</td></tr><tr class=""><td class="c">8</td><td class="l">Evaluation &amp; bias dashboard</td><td class="L">Metrics, baselines, counterfactual bias tests</td><td class="l">—</td></tr></tbody></table><div class="caption"><b>Table 1:</b> Planned features and the model behind each.</div></div>
+<figure><div class="pipeline"><div class="box ">Raw data<br><small>Kaggle, Rozee.pk, ESCO, synthetic</small></div><div class="arrow">➜</div><div class="box ">Cleaning &amp;<br>anonymization</div><div class="arrow">➜</div><div class="box ">Feature<br>engineering</div><div class="arrow">➜</div><div class="box ">CV–job pairs<br><small>weak + LLM + gold labels</small></div><div class="arrow">➜</div><div class="box todo">Model<br>training<br><small>(Phase 3)</small></div></div><figcaption><b>Figure 1:</b> Data pipeline. Solid boxes are implemented in this deliverable; model training is Phase&nbsp;3.</figcaption></figure>
+<p><span class="para-title">Role of external APIs.</span>&ensp; Pretrained LLM APIs are used to (i) pre-label CV–job pairs
+and generate synthetic CVs for training data, (ii) act as a zero-shot baseline in the
+evaluation, and (iii) produce user-facing explanations and rewrites. The retrieval (bi-encoder
+[6]), reranking (cross-encoder [7]) and skill-extraction models are our own
+fine-tuned models. Every API call is logged.</p>
+<p><span class="para-title">Success criteria.</span>&ensp; Job and candidate ranking: NDCG@10 and precision@5 on the human
+gold set, compared with BM25/TF-IDF and zero-shot LLM baselines. Skill extraction: span-level
+F1 against the ESCO dictionary baseline. Bias: change in score under counterfactual swaps of
+name, gender, and university should be statistically indistinguishable from zero.</p>
+<div class="phase">Phase 2: Data Acquisition &amp; Preprocessing</div>
+<h2 id="s6"><span class="num">6</span>Data Collection</h2>
+<div class="tablewrap"><table class=""><thead><tr class=""><th class="L">Source</th><th class="L">Content</th><th class="l">Method</th><th class="r">Raw</th><th class="r">Clean</th></tr></thead><tbody><tr class=""><td class="L">Kaggle <em>Resume Dataset</em> [1]</td><td class="L">Resume text, 24 job categories</td><td class="l">Download</td><td class="r">2,484</td><td class="r">2,473</td></tr><tr class=""><td class="L">Kaggle <em>Updated Resume Dataset</em> [2]</td><td class="L">Resume text, 25 tech-heavy categories</td><td class="l">Download</td><td class="r">962</td><td class="r">159</td></tr><tr class=""><td class="L">Kaggle <em>LinkedIn Job Postings</em> [3]</td><td class="L">Title, description, location, level, salary</td><td class="l">Download</td><td class="r">33,246</td><td class="r">27,738</td></tr><tr class=""><td class="L">Rozee.pk postings</td><td class="L">Pakistan-based postings incl. skills tags, career level, city</td><td class="l">Python scraping</td><td class="r">352</td><td class="r">348</td></tr><tr class=""><td class="L">ESCO v1.1.2 skills [4]</td><td class="L">13,896 skills, 99,192 alternative labels</td><td class="l">Download (CSV)</td><td class="r">13,896</td><td class="r">—</td></tr><tr class=""><td class="L">Resume–JD fit pairs [5]</td><td class="L">Human-labelled <em>No / Potential / Good Fit</em> pairs</td><td class="l">Download</td><td class="r">6,241&thinsp;+&thinsp;1,759</td><td class="r">held out</td></tr><tr class=""><td class="L">Synthetic CVs</td><td class="L">LLM-generated CVs for under-represented roles</td><td class="l">API calls (logged)</td><td colspan="2" class="r">script ready</td></tr><tr class=""><td class="L">LLM-labelled pairs</td><td class="L"><em>poor / partial / good</em> labels for built pairs</td><td class="l">API calls (logged)</td><td colspan="2" class="r">script ready</td></tr></tbody></table><div class="caption"><b>Table 2:</b> Data sources with record counts before and after cleaning (Section&nbsp;7).</div></div>
+<p><span class="para-title">Evidence of collection.</span>&ensp; Each source has a script in <code>data_scripts/</code>:
+<code>download_kaggle.py</code> (official Kaggle API when credentials exist, otherwise byte-identical
+public mirrors on the Hugging Face Hub), <code>download_esco.py</code>, <code>scrape_jobs.py</code>,
+<code>generate_synthetic_cvs.py</code>, and <code>label_pairs.py</code>. A download manifest records file
+names, sizes, row counts and origin. Every LLM call goes through <code>llm_client.py</code>, which
+appends the prompt, model, response, token usage and timestamp to <code>logs/api_calls.jsonl</code>
+and caches responses so no call is paid for twice. The client works with any OpenAI-compatible
+endpoint (OpenAI, Groq, Gemini).</p>
+<p><span class="para-title">Scraping policy.</span>&ensp; The scraper downloads and obeys <code>robots.txt</code> for every URL,
+waits 2–3&thinsp;s between requests (adaptive), sends a descriptive user agent, doubles its delay on HTTP&nbsp;403/429,
+and stores only public posting text (title, company, city, description, skills tags, career
+level, experience). It reads structured data from the schema.org <code>JobPosting</code> block on
+each page rather than brittle HTML selectors. Postings were collected for 19 of
+33 planned search queries (software, data, design, finance, banking, marketing,
+HR and sales). When the site began rate-limiting (87 of 556 requests
+answered HTTP&nbsp;403), the scraper backed off and, after five consecutive blocks, stopped as the
+policy requires. The remaining queries (engineering, healthcare, education, internships) are
+prioritized automatically on the next run, so the current Pakistani sample is tech-heavy. All requests are
+logged to <code>logs/scrape_rozee.log</code>. Data is used for academic purposes only; if a site
+disallows scraping we rely on Kaggle data for that segment.</p>
+<p><span class="para-title">Gold set.</span>&ensp; <code>sample_gold_set.py</code> draws 200 pairs <em>only from the test
+split</em> (50% positives, 30% hard negatives, 20% random negatives; pair type hidden from
+annotators). Two members label them independently using written guidelines, and the script
+reports Cohen's κ (plain and linearly weighted) and flags disagreements for
+adjudication. This set is never used for training.</p>
+<h2 id="s7"><span class="num">7</span>Data Cleaning Implementation</h2>
+<p>All cleaning is implemented in Python (pandas, regex, scikit-learn) in
+<code>data_scripts/clean_resumes.py</code> and <code>clean_jobs.py</code>, with shared utilities in
+<code>common.py</code>. Table&nbsp;3 lists each step and its measured effect.</p>
+<div class="tablewrap"><table class=""><thead><tr class=""><th class="l">Issue</th><th class="L">Handling</th><th class="r">Resumes</th><th class="r">Postings</th></tr></thead><tbody><tr class=""><td class="l">Loaded</td><td class="L">All sources merged into one schema</td><td class="r">3,446</td><td class="r">33,598</td></tr><tr class=""><td class="l">Missing values</td><td class="L">Drop records with empty text or title. Fill missing categorical fields
+(location, seniority, work type) with <code>unknown</code>. Salary is never a model input; it is
+normalized to yearly values for analysis and left as NaN when missing (39.8% available).</td><td class="r">−1</td><td class="r">−1</td></tr><tr class=""><td class="l">Encoding noise</td><td class="L">Repair mis-decoded UTF-8 (“NaÃ¯ve” → “Naïve”), NFKC normalization</td><td class="r">38 fixed</td><td class="r">—</td></tr><tr class=""><td class="l">Noise</td><td class="L">Strip HTML tags and entities, URLs, EEO/legal boilerplate, non-printable characters</td><td class="r">all</td><td class="r">all</td></tr><tr class=""><td class="l">Non-English</td><td class="L">Stop-word ratio test (English vs. Spanish/French/German/Portuguese)</td><td class="r">−0</td><td class="r">−23</td></tr><tr class=""><td class="l">Exact duplicates</td><td class="L">SHA-1 hash of normalized text</td><td class="r">−798</td><td class="r">−3,236</td></tr><tr class=""><td class="l">Near-duplicates</td><td class="L">TF-IDF cosine similarity &gt;0.95 (reposted postings, copied CV templates)</td><td class="r">−8</td><td class="r">−2,087</td></tr><tr class=""><td class="l">Outliers</td><td class="L">Flag below 1st / above 99th percentile of word count (IQR fences as cross-check:
+222 / 532 flagged). Drop clear junk (resumes &lt;50, postings &lt;30 words); truncate long texts at the 99th percentile</td><td class="r">−7; 27 capped</td><td class="r">−165; 283 capped</td></tr><tr class=""><td class="l">Personal data</td><td class="L">Replace emails, phone numbers, URLs and street addresses with
+<code>[EMAIL]</code>, <code>[PHONE]</code>, <code>[URL]</code>, <code>[ADDRESS]</code> before any storage or API call
+(optional spaCy NER for names)</td><td class="r">117 masked</td><td class="r">4,818 masked</td></tr><tr class="midrule"><td class="l"><b>Final</b></td><td class="L"></td><td class="r"><b>2,632</b></td><td class="r"><b>28,086</b></td></tr></tbody></table><div class="caption"><b>Table 3:</b> Cleaning steps and their measured effect (records removed or modified).</div></div>
+<p>Notable findings: the <em>Updated Resume Dataset</em> is mostly duplicates (796
+of its 962 rows), and the Kaggle resumes still contained real-looking phone numbers and
+addresses (299 tokens masked), so anonymization is necessary rather than precautionary.
+Removed near-duplicate pairs are saved for inspection, not silently discarded.</p>
+<h2 id="s8"><span class="num">8</span>Feature Strategy</h2>
+<p>Implemented in <code>data_scripts/build_features.py</code> and <code>skills.py</code>. All fitted
+transformers (scaler, encoder, TF-IDF vocabulary) are fitted on the <em>training split only</em>.</p>
+<ul><li><b>Text normalization:</b> lowercasing, punctuation cleanup and light rule-based
+lemmatization for the TF-IDF baseline only; transformer inputs keep original casing and punctuation.</li><li><b>Text representations:</b> TF-IDF over unigrams and bigrams (50,000 features,
+sublinear TF) as the baseline, and 384-dimensional L2-normalized sentence embeddings from
+<code>all-MiniLM-L6-v2</code> [6], to be fine-tuned in Phase&nbsp;3.</li><li><b>Skill extraction and normalization:</b> a gazetteer of ESCO preferred and alternative
+labels plus curated tech synonyms maps variants (“JS”, “ReactJS”, “k8s”) to one canonical
+skill. Ambiguous single words are excluded. This yields on average 7.95 skills per
+resume and 3.91 per posting, and is the baseline the Phase&nbsp;3 NER model must beat.</li><li><b>Encoding:</b> resume categories and posting categories (posting titles mapped to the
+same 24 categories by ordered rules, covering 60.9% of postings) are label-encoded in a
+shared label space; skills are multi-hot encoded (<code>MultiLabelBinarizer</code>) over a vocabulary
+of 1,169 ESCO skills seen in at least five training documents.</li><li><b>Numeric features:</b> text length, number of skills, and years of experience. Years
+are extracted by regex from explicit mentions (“5+ years of experience”) or, for resumes, from
+the span of dated job entries, with “Current” anchored to the collection year of the source
+(2019) rather than today (coverage: 95.8% of resumes, 46.9% of postings).
+Heavy-tailed counts are log-transformed, missing years get a train-median value plus a missing
+indicator, and all are standardized with <code>StandardScaler</code>.</li><li><b>Pair construction:</b> for each resume, positives are the 3 most similar postings of
+the same category; hard negatives are the 2 most similar postings of a <em>different</em>
+category; one random different-category posting is added. This gives 15,755 pairs
+(7,859 positive, 5,264 hard negative, 2,632 random negative), balanced 50/50.</li><li><b>Splits:</b> 70/15/15 train/validation/test split <em>by resume and by posting</em>
+(not by pair), stratified by category, and pairs are only formed within a split, so no resume
+or posting leaks across splits. Resumes: 1,842 / 395 / 395. Postings: 19,660 /
+4,213 / 4,213. Pairs: 11,052 / 2,351 / 2,352.</li></ul>
+<h2 id="s9"><span class="num">9</span>Exploratory Data Analysis</h2>
+<p>All charts are produced by <code>data_scripts/eda.py</code> on the cleaned data.</p>
+<figure><img src="../figures/fig_category_distribution.png" style="width:86%"><figcaption><b>Figure 2:</b> Class distribution of resume categories (left) and postings mapped to the same
+categories (right, log scale). Most resume classes hold 100–125 samples, but the imbalance ratio is
+9.91 (IT: 218 vs. BPO: 22), so we will use class
+weights, stratified splits and synthetic CVs for the rare roles.</figcaption></figure>
+<figure><img src="../figures/fig_length_distribution.png" style="width:100%"><figcaption><b>Figure 3:</b> Text length before (grey) and after cleaning. The median resume has 745 words
+and the median posting 444. Most short raw resumes disappear because they are
+duplicates; the spike at the right edge of the posting histogram is the 99th-percentile cap.</figcaption></figure>
+<figure><img src="../figures/fig_top_skills.png" style="width:82%"><figcaption><b>Figure 4:</b> Top 20 skills in postings versus resumes. Resumes over-emphasize generic skills
+(customer service, Excel), while postings ask for cloud, AI and Agile skills that resumes rarely
+mention. Of the 2,278 distinct skills found in postings, 976 never occur
+in any of the 2,632 resumes (Jaccard overlap of the two vocabularies: 0.53), and
+22 of the 100 most requested skills appear in fewer than 1% of resumes: the
+vocabulary mismatch the skill-gap report targets.</figcaption></figure>
+<figure><img src="../figures/fig_correlation.png" style="width:92%"><figcaption><b>Figure 5:</b> Spearman correlations of numeric features. Longer documents list more skills
+(ρ=0.42 for resumes, 0.48 for postings), and required years of
+experience is the strongest correlate of advertised salary (ρ=0.54). No pair is
+collinear enough to drop a feature.</figcaption></figure>
+<figure><img src="../figures/fig_missing_seniority.png" style="width:100%"><figcaption><b>Figure 6:</b> Missing values in the raw LinkedIn data (left) and seniority after cleaning (right).
+Salary is missing for most postings and is therefore not a model input; 27.3% of
+seniority labels are missing and are filled with <code>unknown</code> instead of being guessed.</figcaption></figure>
+<figure><img src="../figures/fig_pairs.png" style="width:100%"><figcaption><b>Figure 7:</b> Similarity of constructed pairs under TF-IDF (left) and the pretrained, not yet
+fine-tuned MiniLM encoder (right). Random negatives are easy to separate, but hard negatives
+overlap almost completely with positives (MiniLM mean cosine 0.46 vs. 0.48; AUC
+0.53). These pairs are exactly the training signal the Phase&nbsp;3 rankers need.</figcaption></figure>
+<p><span class="para-title">Further observations.</span>&ensp; (1) The Kaggle resumes are written by experienced
+professionals (median well above ten years of experience), while our primary users are fresh
+graduates; synthetic entry-level CVs and the Pakistani postings address this domain gap. (2) The
+LinkedIn postings are US-based. The Rozee.pk data adds local titles, cities and skill tags; its
+most requested skills are artificial intelligence, Python, computer science, Git, CI/CD. (3) 8 of the 348 Rozee.pk postings
+state an explicit gender preference (7 male, 1 female). We keep this field
+for the Phase&nbsp;4 bias analysis and never use it as a model input.</p>
+<h2 id="s10"><span class="num">10</span>Repository Structure</h2>
+<pre>resumatch/
+|-- README.md               # setup, pipeline, data sources
+|-- Makefile                # make data scrape clean features eda gold report
+|-- requirements.txt
+|-- .env.example            # LLM / Kaggle keys (real .env is git-ignored)
+|-- .gitignore              # excludes raw data, models, API keys, API cache
+|-- data_scripts/
+|   |-- common.py           # paths, noise removal, PII masking, dedup helpers
+|   |-- download_kaggle.py  # Kaggle API or HF mirrors + manifest
+|   |-- download_esco.py
+|   |-- scrape_jobs.py      # Rozee.pk, robots.txt-aware, rate-limited
+|   |-- llm_client.py       # OpenAI-compatible client, JSONL logging + cache
+|   |-- generate_synthetic_cvs.py   # API, logged
+|   |-- label_pairs.py              # API, logged
+|   |-- clean_resumes.py
+|   |-- clean_jobs.py
+|   |-- skills.py           # ESCO gazetteer: extraction + normalization
+|   |-- build_features.py   # features, splits, pairs, embeddings
+|   |-- sample_gold_set.py  # gold set sampling + Cohen&#x27;s kappa
+|   `-- eda.py
+|-- data/                   # raw/ interim/ processed/ gold/ (git-ignored)
+|-- logs/                   # api_calls.jsonl, scrape log
+|-- notebooks/
+|-- report/                 # LaTeX source, figures, stats, PDF build
+`-- app/                    # Phase 5 (Streamlit/Gradio)
+</pre>
+<h2 id="s11"><span class="num">11</span>Status and Next Steps</h2>
+<div class="tablewrap"><table class=""><thead><tr class=""><th class="L">Item</th><th class="l">Status</th></tr></thead><tbody><tr class=""><td class="L">Kaggle resumes and postings, ESCO taxonomy downloaded</td><td class="l">Done</td></tr><tr class=""><td class="L">Rozee.pk scraper with robots.txt, rate limiting and logging</td><td class="l">Done (352 postings)</td></tr><tr class=""><td class="L">Cleaning, anonymization, deduplication, outlier handling</td><td class="l">Done</td></tr><tr class=""><td class="L">Skill gazetteer, TF-IDF, multi-hot, numeric features, MiniLM embeddings</td><td class="l">Done</td></tr><tr class=""><td class="L">Leakage-free splits and 15,755 weakly labelled pairs</td><td class="l">Done</td></tr><tr class=""><td class="L">EDA figures</td><td class="l">Done</td></tr><tr class=""><td class="L">Synthetic CVs and LLM pair labels (scripts and logging ready)</td><td class="l">Pending API key</td></tr><tr class=""><td class="L">Gold set: 200 pairs sampled; double annotation and κ</td><td class="l">Pending manual labelling</td></tr></tbody></table><div class="caption"><b>Table 4:</b> Deliverable 1 status.</div></div>
+<h2 id="s12"><span class="num">12</span>Risks and Mitigations</h2>
+<div class="tablewrap"><table class=""><thead><tr class=""><th class="l">Risk</th><th class="L">Mitigation</th></tr></thead><tbody><tr class=""><td class="l">Scraping blocked or disallowed</td><td class="L">robots.txt checked per URL; fall back to Kaggle postings; keep the scraper limited to permitted pages.</td></tr><tr class=""><td class="l">Noisy weak / LLM labels</td><td class="L">Hand-verify a sample, report agreement, and keep the gold test set human-labelled.</td></tr><tr class=""><td class="l">Small or imbalanced resume data</td><td class="L">Synthetic CVs for rare roles, class weighting, stratified splits.</td></tr><tr class=""><td class="l">Domain gap (US, senior CVs vs. Pakistani graduates)</td><td class="L">Rozee.pk postings, synthetic entry-level CVs, separate evaluation on local data.</td></tr><tr class=""><td class="l">Bias in data (gender, name, institution)</td><td class="L">PII anonymized; posting gender preferences kept for auditing only; counterfactual swap tests in Phase&nbsp;4.</td></tr><tr class=""><td class="l">API cost or rate limits</td><td class="L">All responses cached; a small, cheap model for bulk labelling; exponential back-off.</td></tr><tr class=""><td class="l">Limited compute</td><td class="L">Small models (MiniLM-class) trainable on a free Colab GPU.</td></tr></tbody></table></div>
+<h2 id="s13"><span class="num">13</span>Team Contribution Plan</h2>
+<div class="tablewrap"><table class=""><thead><tr class=""><th class="l">Member</th><th class="L">Responsibility in Deliverable 1</th></tr></thead><tbody><tr class=""><td class="l">Muhammad Sufyan</td><td class="L">Repository setup, scraping scripts, data cleaning pipeline, report</td></tr><tr class=""><td class="l">[Member 2]</td><td class="L">Kaggle data cleaning review, EDA, gold-set annotation (annotator 1)</td></tr><tr class=""><td class="l">[Member 3]</td><td class="L">Feature engineering, synthetic CV generation, gold-set annotation (annotator 2)</td></tr></tbody></table></div>
+<h2 id="refs">References</h2><ol class="bib"><li value="1">snehaanbhawal (Kaggle user). <em>Resume Dataset</em>. Kaggle.
+<a href="https://www.kaggle.com/datasets/snehaanbhawal/resume-dataset">https://www.kaggle.com/datasets/snehaanbhawal/resume-dataset</a></li><li value="2">gauravduttakiit (Kaggle user). <em>Resume Dataset
+(UpdatedResumeDataSet.csv)</em>. Kaggle. <a href="https://www.kaggle.com/datasets/gauravduttakiit/resume-dataset">https://www.kaggle.com/datasets/gauravduttakiit/resume-dataset</a></li><li value="3">arshkon (Kaggle user). <em>LinkedIn Job Postings (2023–2024)</em>. Kaggle.
+<a href="https://www.kaggle.com/datasets/arshkon/linkedin-job-postings">https://www.kaggle.com/datasets/arshkon/linkedin-job-postings</a></li><li value="4">European Commission. <em>ESCO: European Skills, Competences, Qualifications
+and Occupations</em>, v1.1.2. <a href="https://esco.ec.europa.eu">https://esco.ec.europa.eu</a></li><li value="5"><em>resume-job-description-fit</em>. Hugging Face Datasets.
+<a href="https://huggingface.co/datasets/cnamuangtoun/resume-job-description-fit">https://huggingface.co/datasets/cnamuangtoun/resume-job-description-fit</a></li><li value="6">N.&nbsp;Reimers and I.&nbsp;Gurevych. Sentence-BERT: Sentence Embeddings using Siamese
+BERT-Networks. <em>EMNLP</em>, 2019.</li><li value="7">R.&nbsp;Nogueira and K.&nbsp;Cho. Passage Re-ranking with BERT. arXiv:1901.04085, 2019.</li></ol></body></html>

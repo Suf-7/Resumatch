@@ -1,0 +1,16 @@
+{
+  "file": "esco_skills_v1.1.2.csv",
+  "source": "https://raw.githubusercontent.com/tabiya-tech/taxonomy-model-application/main/data-sets/csv/esco-v1.1.2/skills.csv",
+  "skills": 13896,
+  "alt_labels": 99192,
+  "skill_types": {
+    "skill/competence": 10831,
+    "knowledge": 3059
+  },
+  "reuse_levels": {
+    "sector-specific": 6654,
+    "cross-sector": 3754,
+    "occupation-specific": 3043,
+    "transversal": 440
+  }
+}
