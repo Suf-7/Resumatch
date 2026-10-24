@@ -11,6 +11,24 @@ A job seeker uploads a CV and gets the **top 3 open job postings** they can appl
 | 3 | Evaluation and bias audit | Not started |
 | 4 | App (Streamlit/Gradio) | Not started |
 
+## Current state (2026-10-24)
+
+| Item | Count |
+|---|---|
+| Resumes (cleaned) | 2,632 of 3,446 |
+| Job postings (cleaned) | 28,088: 27,740 LinkedIn (training only) + 348 Rozee.pk |
+| Open-jobs pool | 348 Rozee.pk postings with apply links; 340 close within 7 days |
+| Training pairs | 15,755 (7,859 positive, 5,264 hard negative, 2,632 random negative) |
+| Baseline ATS score (AUC) | 0.73 vs. random negatives, 0.52 vs. hard negatives |
+
+**To do**
+- [ ] Retry `make refresh` (Rozee.pk rate-limited the scraper on 2026-10-24); the pool empties within a week without it.
+- [ ] Label the 200 gold pairs in `data/gold/` (Muaaz and Hanan, independently), then run `sample_gold_set.py score`.
+- [ ] Add `LLM_API_KEY` to `.env`, then `make synthetic label`.
+- [ ] Phase 3: fine-tune the bi-encoder, reranker and skill NER, and learn the ATS weights on the gold set.
+
+Rebuilding the PDF (`make report`) is safe at any time. Don't run `make live` on its own before submitting: it drops postings that have closed since 2026-10-24, so the report numbers would shrink.
+
 ## Quick start
 
 ```bash
