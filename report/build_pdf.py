@@ -44,6 +44,8 @@ h2 .num { display: inline-block; min-width: 1.6em; }
 .titlepage .deliv { font-size: 13.5pt; font-weight: bold; margin-top: 18mm; }
 .titlepage .track { font-size: 11pt; margin-top: 2mm; }
 .titlepage table.auto { margin: 22mm auto 0; font-size: 11pt; }
+.titlepage .link { font-size: 11pt; margin-top: 5mm; }
+.titlepage .link a { color: #2b6cb0; }
 .titlepage .date { margin-top: auto; font-size: 13pt; }
 .toc { break-after: page; }
 .toc h2 { margin-top: 0; }
@@ -331,6 +333,9 @@ class Converter:
         trs = "".join(
             "<tr>" + "".join(f"<td>{self.inline(c)}</td>" for c in r.split("&")) + "</tr>"
             for r in re.split(r"\\\\", rows) if r.strip())
+        links = "".join(
+            f'<div class="link"><a href="{u}">{html.escape(re.sub(r"^https?://", "", u))}</a></div>'
+            for u in re.findall(r"\\url\{([^}]+)\}", tp))
         return f"""<div class="titlepage">
 <div class="uni">FAST National University of Computer and Emerging Sciences, Lahore</div>
 <div class="course">Artificial Intelligence — Semester Project</div>
@@ -339,6 +344,7 @@ class Converter:
 <div class="deliv">Deliverable {self.number}: {self.inline(self.deliv_title)}</div>
 <div class="track">Track A — Application Development</div>
 <table class="auto"><thead><tr><th>Member</th><th>Roll No. / Section</th></tr></thead><tbody>{trs}</tbody></table>
+{links}
 <div class="date">{self.date}</div></div>"""
 
     def toc(self) -> str:

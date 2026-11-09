@@ -64,6 +64,10 @@ Muaaz Fahad & 24L-2563 / BSDS-5B\\
 Hanan Ishaque & 24L-2537 / BSDS-5B\\
 \bottomrule
 \end{tabular}
+\vspace{2.5em}
+{\normalsize\url{https://github.com/Suf-7/Resumatch}\par}
+\vspace{0.4em}
+{\normalsize\url{https://huggingface.co/Suf7/resumatch-models}\par}
 \vfill
 {\large November 2026\par}
 \end{titlepage}
@@ -417,8 +421,9 @@ other postings) in training, so it measures generalization to new postings rathe
 
 \section{Reproducibility and Model Weights}\label{sec:repro}
 Code is in \code{src/} (models in \code{src/models/}), dependencies in \code{requirements.txt}.
-Weights are not stored in Git. \code{make weights} downloads them from the Hugging Face Hub
-(\code{Suf7/resumatch-models}) or the GitHub Release tagged \code{deliverable2-weights},
+Weights are not stored in Git. \code{make weights} downloads them from
+\url{https://huggingface.co/Suf7/resumatch-models}
+or the GitHub Release tagged \code{deliverable2-weights},
 or they can be rebuilt from scratch with:
 \begin{itemize}
 \item \code{make train} --- bi-encoder grid search, pair matrices, MatchNet grid search;

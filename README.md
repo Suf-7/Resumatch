@@ -2,6 +2,18 @@
 
 **AI-powered resume ↔ job matching.** AI semester project, FAST-NUCES Lahore (Track A: Application Development).
 
+## Deliverable 2 submission (due 10 November 2026)
+
+Hand in these three items from the brief:
+
+| What the brief asks | Where it is |
+|---|---|
+| GitHub repository (`/src` or `/models`, plus `requirements.txt`) | **https://github.com/Suf-7/Resumatch** — code in [`src/`](src/), models in [`src/models/`](src/models/), [`requirements.txt`](requirements.txt) |
+| LaTeX PDF (Phases 3–4: architecture, curves, contribution table) | **[`report/Resumatch_Deliverable2.pdf`](report/Resumatch_Deliverable2.pdf)** |
+| Model weights (not in Git; Hugging Face or Drive link in this README) | **https://huggingface.co/Suf7/resumatch-models** (fallback: [GitHub Release](https://github.com/Suf-7/Resumatch/releases/tag/deliverable2-weights)) |
+
+Reproduce locally: `make setup && make weights`. Train from scratch with `make train` (about 1.5 h on an M1).
+
 A job seeker uploads a CV and gets the **top 3 open job postings** they can apply to. Each one comes with an apply link, an ATS-style score for that posting, matched and missing skills, and suggested bullet rewrites. Recruiters upload a job description plus a batch of CVs and get a ranked, explained shortlist. The retrieval, ranking, and skill-extraction models are our own trained or fine-tuned models. LLM APIs are used only for labelling, synthetic data, and explanations.
 
 | Deliverable | Scope | Status |

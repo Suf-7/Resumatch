@@ -19,6 +19,8 @@ h2 .num { display: inline-block; min-width: 1.6em; }
 .titlepage .deliv { font-size: 13.5pt; font-weight: bold; margin-top: 18mm; }
 .titlepage .track { font-size: 11pt; margin-top: 2mm; }
 .titlepage table.auto { margin: 22mm auto 0; font-size: 11pt; }
+.titlepage .link { font-size: 11pt; margin-top: 5mm; }
+.titlepage .link a { color: #2b6cb0; }
 .titlepage .date { margin-top: auto; font-size: 13pt; }
 .toc { break-after: page; }
 .toc h2 { margin-top: 0; }
@@ -63,6 +65,7 @@ a { color: #2b6cb0; text-decoration: none; }
 <div class="deliv">Deliverable 2: Model Architecture &amp; Empirical Evaluation</div>
 <div class="track">Track A — Application Development</div>
 <table class="auto"><thead><tr><th>Member</th><th>Roll No. / Section</th></tr></thead><tbody><tr><td>Muhammad Sufyan</td><td>24L-2601 / BSDS-5B</td></tr><tr><td>Muaaz Fahad</td><td>24L-2563 / BSDS-5B</td></tr><tr><td>Hanan Ishaque</td><td>24L-2537 / BSDS-5B</td></tr></tbody></table>
+<div class="link"><a href="https://github.com/Suf-7/Resumatch">github.com/Suf-7/Resumatch</a></div><div class="link"><a href="https://huggingface.co/Suf7/resumatch-models">huggingface.co/Suf7/resumatch-models</a></div>
 <div class="date">November 2026</div></div>
 <div class="toc"><h2>Contents</h2><ol><li><a href="#s1"><span class="n">1</span>Introduction</a></li><li class="phase-item">Phase 3: Model Architecture &amp; Training</li><li><a href="#s2"><span class="n">2</span>System Overview</a></li><li><a href="#s3"><span class="n">3</span>Stage 1: Bi-encoder</a></li><li><a href="#s4"><span class="n">4</span>Stage 2: MatchNet</a></li><li><a href="#s5"><span class="n">5</span>Baselines</a></li><li><a href="#s6"><span class="n">6</span>Hyperparameter Tuning</a></li><li><a href="#s7"><span class="n">7</span>Training Curves</a></li><li class="phase-item">Phase 4: Evaluation &amp; Analysis</li><li><a href="#s8"><span class="n">8</span>Validation Strategy</a></li><li><a href="#s9"><span class="n">9</span>Metrics and Why</a></li><li><a href="#s10"><span class="n">10</span>Results</a></li><li><a href="#s11"><span class="n">11</span>Error Analysis</a></li><li><a href="#s12"><span class="n">12</span>Bias Check</a></li><li><a href="#s13"><span class="n">13</span>Limitations</a></li><li><a href="#s14"><span class="n">14</span>Reproducibility and Model Weights</a></li><li><a href="#s15"><span class="n">15</span>Contribution Table</a></li><li><a href="#s16"><span class="n">16</span>Appendix: Full MatchNet Grid</a></li><li><a href="#refs"><span class="n"></span>References</a></li></ol></div>
 <h2 id="s1"><span class="num">1</span>Introduction</h2>
@@ -280,8 +283,9 @@ other postings) in training, so it measures generalization to new postings rathe
 (<code>make refresh</code>) before a demo.</li></ul>
 <h2 id="s14"><span class="num">14</span>Reproducibility and Model Weights</h2>
 <p>Code is in <code>src/</code> (models in <code>src/models/</code>), dependencies in <code>requirements.txt</code>.
-Weights are not stored in Git. <code>make weights</code> downloads them from the Hugging Face Hub
-(<code>Suf7/resumatch-models</code>) or the GitHub Release tagged <code>deliverable2-weights</code>,
+Weights are not stored in Git. <code>make weights</code> downloads them from
+<a href="https://huggingface.co/Suf7/resumatch-models">https://huggingface.co/Suf7/resumatch-models</a>
+or the GitHub Release tagged <code>deliverable2-weights</code>,
 or they can be rebuilt from scratch with:</p>
 <ul><li><code>make train</code> — bi-encoder grid search, pair matrices, MatchNet grid search;</li><li><code>make evaluate</code> — test metrics, top-3 retrieval, figures, report tables;</li><li><code>make report2</code> — this PDF.</li></ul>
 <h2 id="s15"><span class="num">15</span>Contribution Table</h2>
