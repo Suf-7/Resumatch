@@ -1,0 +1,17 @@
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}l r r r r r r@{}}
+\toprule
+Model & Precision & Recall & F1 & Accuracy & AUC-ROC [95\% CI] & PR-AUC\\
+\midrule
+ATS score (rules) & 0.514 & 0.997 & 0.678 & 0.516 & 0.536 [0.51, 0.56] & 0.544\\
+TF-IDF cosine & 0.574 & 0.784 & 0.663 & 0.591 & 0.612 [0.58, 0.64] & 0.582\\
+MiniLM cosine (pretrained) & 0.537 & 0.876 & 0.666 & 0.550 & 0.579 [0.55, 0.61] & 0.592\\
+Bi-encoder cosine (fine-tuned) & 0.571 & 0.887 & 0.695 & 0.601 & 0.633 [0.61, 0.66] & 0.607\\
+Logistic regression & 0.563 & 0.897 & 0.692 & 0.590 & 0.648 [0.62, 0.67] & 0.622\\
+Gradient boosting & 0.594 & 0.876 & 0.708 & 0.630 & 0.695 [0.67, 0.72] & 0.679\\
+\textbf{MatchNet} & \textbf{0.668} & \textbf{0.822} & \textbf{0.737} & \textbf{0.699} & \textbf{0.768 [0.74, 0.79]} & \textbf{0.757}\\
+\bottomrule
+\end{tabularx}
+\caption{Task B (human labels): test-set results (n = 1,759, 51\% positive). Thresholds were chosen on the validation split by maximum F1.}\label{tab:reshuman}
+\end{table}

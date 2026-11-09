@@ -16,11 +16,15 @@ data/interim/
 data/processed/
 data/gold/*.csv
 !data/gold/.gitkeep
-models/
+/models/
 *.npz
 *.npy
 *.joblib
 *.parquet
+
+# Course briefs (not ours to redistribute)
+/Deliverable*.pdf
+/HireFit*.pdf
 
 # API logs can contain resume text; keep locally, share a redacted sample only
 logs/api_cache.jsonl

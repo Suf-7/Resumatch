@@ -1,0 +1,15 @@
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}L r@{}}
+\toprule
+Ranker & Precision@3\\
+\midrule
+TF-IDF cosine & 0.406\\
+MiniLM (pretrained) & 0.417\\
+Bi-encoder (fine-tuned) & 0.634\\
+Bi-encoder + MatchNet re-rank & 0.641\\
+Random ranking (expected) & 0.050\\
+\bottomrule
+\end{tabularx}
+\caption{Top-3 recommendation on the test split: 395 resumes, each ranked against all 2,565 test postings with a known occupation. A recommended posting counts as relevant if it belongs to the resume's occupation.}\label{tab:retrieval}
+\end{table}

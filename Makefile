@@ -1,7 +1,8 @@
 PY ?= .venv/bin/python
 S = data_scripts
 
-.PHONY: setup data scrape refresh synthetic clean features live ats label eda gold report all
+.PHONY: setup data scrape refresh synthetic clean features live ats label eda gold report all \
+        train evaluate error-analysis bias-check weights report2
 
 setup:
 	python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
@@ -42,5 +43,26 @@ gold:
 
 report:
 	$(PY) report/make_numbers.py && $(PY) report/build_pdf.py
+
+# ---- Deliverable 2 (Phases 3-4); run from the repo root
+MPS = PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.7 PYTORCH_MPS_LOW_WATERMARK_RATIO=0.5
+
+train:            ## bi-encoder grid (~1 h on an M1), pair matrices, MatchNet grid
+	cd src && $(MPS) ../$(PY) -u train_bi_encoder.py && ../$(PY) pair_matrices.py && ../$(PY) train_matchnet.py
+
+evaluate:         ## test metrics, top-3 retrieval, figures
+	cd src && ../$(PY) evaluate.py && ../$(PY) retrieval_eval.py && ../$(PY) plots.py
+
+error-analysis:   ## Muaaz
+	cd src && ../$(PY) error_analysis.py
+
+bias-check:       ## Hanan
+	cd src && ../$(PY) bias_check.py
+
+weights:          ## download trained weights from the Hugging Face Hub instead of training
+	cd src && ../$(PY) weights.py download
+
+report2:
+	$(PY) report/contributions.py && $(PY) report/make_tables.py && $(PY) report/build_pdf.py deliverable2.tex
 
 all: data scrape clean features live ats eda gold report

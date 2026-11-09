@@ -4,7 +4,7 @@ Converts the (deliberately simple) LaTeX subset used in main.tex to HTML and pri
 with headless Chrome. `tectonic main.tex` produces the typeset LaTeX version of the same
 source when a TeX engine is available; this is the fallback used for offline builds.
 
-    python report/make_numbers.py && python report/build_pdf.py
+    python report/make_numbers.py && python report/build_pdf.py [main.tex | deliverable2.tex]
 """
 from __future__ import annotations
 
@@ -16,8 +16,6 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-OUT_HTML = HERE / "build" / "Resumatch_Deliverable1.html"
-OUT_PDF = HERE / "Resumatch_Deliverable1.pdf"
 CHROME_CANDIDATES = [
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
     "/Applications/Chromium.app/Contents/MacOS/Chromium",
@@ -27,7 +25,7 @@ CHROME_CANDIDATES = [
 
 CSS = r"""
 @page { size: A4; margin: 22mm 21mm 20mm 21mm;
-  @top-left { content: "Resumatch — Deliverable 1"; font: 9pt Charter, Georgia, serif; color: #4a5568; }
+  @top-left { content: "Resumatch — Deliverable __N__"; font: 9pt Charter, Georgia, serif; color: #4a5568; }
   @top-right { content: "AI Semester Project, FAST-NUCES Lahore"; font: 9pt Charter, Georgia, serif; color: #4a5568; }
   @bottom-center { content: counter(page); font: 9.5pt Charter, Georgia, serif; } }
 @page:first { @top-left { content: none; } @top-right { content: none; } @bottom-center { content: none; } }
@@ -130,17 +128,31 @@ def replace_cmd(s: str, name: str, fn, nargs: int = 1) -> str:
 
 def load_macros() -> dict[str, str]:
     macros = {}
-    for line in (HERE / "numbers.tex").read_text().splitlines():
-        m = re.match(r"\\newcommand\{\\(\w+)\}\{(.*)\\xspace\}$", line)
-        if m:
-            macros[m.group(1)] = m.group(2)
+    for path in sorted(HERE.glob("numbers*.tex")):
+        for line in path.read_text().splitlines():
+            m = re.match(r"\\newcommand\{\\(\w+)\}\{(.*)\\xspace\}$", line)
+            if m:
+                macros[m.group(1)] = m.group(2)
     return macros
+
+
+def expand_inputs(tex: str) -> str:
+    def repl(m):
+        name = m.group(1)
+        if name.startswith("numbers"):
+            return ""
+        return expand_inputs((HERE / (name if name.endswith(".tex") else name + ".tex")).read_text())
+    return re.sub(r"\\input\{([^}]+)\}", repl, tex)
 
 
 class Converter:
     def __init__(self, tex: str):
         self.macros = load_macros()
-        self.tex = tex
+        self.tex = tex = expand_inputs(tex)
+        m = re.search(r"Deliverable (\d+): (.+?)\\par", tex)
+        self.number, self.deliv_title = m.group(1), m.group(2)
+        d = re.search(r"\\vfill\s*\{\\large (.+?)\\par\}", tex)
+        self.date = d.group(1) if d else ""
         self.sections: list[tuple[str, str, str]] = []  # (kind, number, title)
         self.labels: dict[str, str] = {}
         self.cites: dict[str, int] = {}
@@ -153,7 +165,7 @@ class Converter:
             s = re.sub(r"\\" + k + r"(?![A-Za-z])", lambda _, v=self.macros[k]: v, s)
         s = s.replace("\\\\", "\x00BR")
         s = re.sub(r"\\(?=\s)", "", s)
-        s = s.replace("\\&", "\x00AMP").replace("\\%", "%").replace("\\_", "_").replace("\\#", "#")
+        s = s.replace("\\&", "\x00AMP").replace("\\%", "%").replace("\\_", "_").replace("\\#", "#").replace("\\{", "{").replace("\\}", "}")
         s = s.replace('\\"{i}', "ï").replace("\\~{A}", "Ã").replace("\\textasciimacron{}", "¯")
         s = html.escape(s, quote=False).replace("\x00AMP", "&amp;")
         s = replace_cmd(s, "url", lambda u: f'<a href="{u}">{u}</a>')
@@ -177,13 +189,25 @@ class Converter:
 
     @staticmethod
     def math(s: str) -> str:
+        symbols = [("\\kappa", "κ"), ("\\rho", "ρ"), ("\\rightarrow", "→"), ("\\times", "×"),
+                   ("\\Delta", "Δ"), ("\\cdot", "·"), ("\\geq", "≥"), ("\\leq", "≤"), ("\\tau", "τ"),
+                   ("\\log", "log"), ("\\exp", "exp"), ("\\sum", "∑"), ("\\odot", "⊙"),
+                   ("\\lvert", "|"), ("\\rvert", "|"), ("\\cos", "cos"), ("\\;", " "), ("\\,", " "), ("\\mathrm", "")]
+
         def conv(m):
-            x = m.group(1)
-            x = x.replace("\\kappa", "κ").replace("\\rho", "ρ").replace("\\rightarrow", "→")
-            x = x.replace("&lt;", "<").replace("&gt;", ">")
-            x = x.replace("-", "−")
+            x = m.group(1).replace("&lt;", "<").replace("&gt;", ">")
+            for a, b in symbols:
+                x = x.replace(a, b)
+            x = html.escape(x.replace("-", "−"), quote=False)
+            sup = lambda g: "\x03" + g.group(1) + "\x04"
+            sub = lambda g: "\x05" + g.group(1) + "\x06"
+            x = re.sub(r"\^\{([^}]*)\}", sup, x)
+            x = re.sub(r"\^(\S)", sup, x)
+            x = re.sub(r"_\{([^}]*)\}", sub, x)
+            x = re.sub(r"_(\w)", sub, x)
             x = re.sub(r"\b([a-zA-Z])\b", r"<i>\1</i>", x)
-            return html.escape(x, quote=False).replace("&lt;i&gt;", "<i>").replace("&lt;/i&gt;", "</i>")
+            return (x.replace("\x03", "<sup>").replace("\x04", "</sup>")
+                    .replace("\x05", "<sub>").replace("\x06", "</sub>"))
         return re.sub(r"\$([^$]+)\$", conv, s)
 
     def cite(self, keys: str) -> str:
@@ -215,7 +239,7 @@ class Converter:
         spec = re.sub(r"[@>]\{[^}]*\}|\|", "", spec)
         spec = re.sub(r"p\{[^}]*\}", "p", spec)
         aligns = [c for c in spec if c in "lcrLXp"]
-        rows_src = rows_src.replace("\\toprule", "").replace("\\bottomrule", "")
+        rows_src = rows_src.replace("\\toprule", "").replace("\\bottomrule", "").replace("\\addlinespace", "")
         parts = re.split(r"\\midrule", rows_src)
         header_src = parts[0] if len(parts) > 1 else ""
         body_parts = parts[1:] if len(parts) > 1 else parts
@@ -312,10 +336,10 @@ class Converter:
 <div class="course">Artificial Intelligence — Semester Project</div>
 <div class="name">Resumatch</div>
 <div class="sub">AI-Powered Resume–Job Matching Platform</div>
-<div class="deliv">Deliverable 1: Problem Definition &amp; Data Foundations</div>
+<div class="deliv">Deliverable {self.number}: {self.inline(self.deliv_title)}</div>
 <div class="track">Track A — Application Development</div>
 <table class="auto"><thead><tr><th>Member</th><th>Roll No. / Section</th></tr></thead><tbody>{trs}</tbody></table>
-<div class="date">October 2026</div></div>"""
+<div class="date">{self.date}</div></div>"""
 
     def toc(self) -> str:
         items = []
@@ -384,12 +408,15 @@ class Converter:
         html_body = "\n".join(out)
         html_body = re.sub(r"\x00BLOCK(\d+)\x00", lambda m: blocks[int(m.group(1))], html_body)
         return (f'<!doctype html><html lang="en"><head><meta charset="utf-8">'
-                f"<title>Resumatch — Deliverable 1</title><style>{CSS}</style></head>"
+                f"<title>Resumatch — Deliverable {self.number}</title>"
+                f"<style>{CSS.replace('__N__', self.number)}</style></head>"
                 f"<body>{html_body}</body></html>")
 
 
 def main() -> None:
-    conv = Converter((HERE / "main.tex").read_text())
+    conv = Converter((HERE / (sys.argv[1] if len(sys.argv) > 1 else "main.tex")).read_text())
+    OUT_HTML = HERE / "build" / f"Resumatch_Deliverable{conv.number}.html"
+    OUT_PDF = HERE / f"Resumatch_Deliverable{conv.number}.pdf"
     OUT_HTML.parent.mkdir(exist_ok=True)
     OUT_HTML.write_text(conv.convert())
     chrome = next((c for c in CHROME_CANDIDATES if c and Path(c).exists()), None)

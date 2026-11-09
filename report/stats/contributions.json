@@ -1,0 +1,57 @@
+{
+  "Muhammad Sufyan": {
+    "commits": 6,
+    "lines_added": 3175,
+    "lines_removed": 18,
+    "modules": [
+      "report (build_pdf.py)",
+      "data_scripts/build_features.py",
+      "data_scripts/scrape_jobs.py",
+      "data_scripts/common.py",
+      "data_scripts/skills.py",
+      "data_scripts/eda.py",
+      "data_scripts/clean_jobs.py",
+      "report (make_numbers.py)",
+      "data_scripts/clean_resumes.py",
+      "README.md",
+      "data_scripts/ats_score.py",
+      "data_scripts/download_kaggle.py",
+      "data_scripts/llm_client.py",
+      "data_scripts/sample_gold_set.py",
+      "data_scripts/generate_synthetic_cvs.py",
+      "data_scripts/label_pairs.py",
+      "data_scripts/live_pool.py",
+      "notebooks",
+      "Makefile",
+      ".gitignore",
+      "data_scripts/download_esco.py",
+      "requirements.txt",
+      ".env.example",
+      "app",
+      "data",
+      "logs"
+    ],
+    "commit_list": [
+      "90b1ebb README: current state and to-do list",
+      "f3fa063 Report: treat Rozee.pk 403 as a temporary rate limit",
+      "19aee8f Top-3 open jobs flow: keep apply links and closing dates, open-jobs pool, baseline per-job ATS score, report update",
+      "b0580b4 Add team members to report and README",
+      "0bd1ba2 Update team members in README.md",
+      "031556b Deliverable 1: data pipeline, EDA and Resumatch report"
+    ]
+  },
+  "Muaaz Fahad": {
+    "commits": 0,
+    "lines_added": 0,
+    "lines_removed": 0,
+    "modules": [],
+    "commit_list": []
+  },
+  "Hanan Ishaque": {
+    "commits": 0,
+    "lines_added": 0,
+    "lines_removed": 0,
+    "modules": [],
+    "commit_list": []
+  }
+}

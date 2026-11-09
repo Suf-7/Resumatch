@@ -1,0 +1,16 @@
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}c c c c r r r r@{}}
+\toprule
+Learning rate & Batch & Max len & Best ep. & Val AUC & Val AUC (hard) & Val P@3 & Min\\
+\midrule
+\multicolumn{4}{l}{pretrained MiniLM, no fine-tuning} & 0.644 & 0.539 & 0.429 & --\\
+$1\times10^{-5}$ & 32 & 256 & 3 & 0.729 & 0.628 & 0.544 & 8\\
+$3\times10^{-5}$ & 32 & 256 & 3 & 0.771 & 0.683 & 0.609 & 8\\
+\textbf{$1\times10^{-4}$} & \textbf{32} & \textbf{256} & \textbf{3} & \textbf{0.801} & \textbf{0.724} & \textbf{0.631} & \textbf{8}\\
+$3\times10^{-5}$ & 16 & 256 & 3 & 0.793 & 0.714 & 0.629 & 9\\
+$3\times10^{-5}$ & 32 & 128 & 3 & 0.751 & 0.666 & 0.579 & 3\\
+\bottomrule
+\end{tabularx}
+\caption{Bi-encoder hyperparameter search (validation split). Selection criterion: AUC of positives vs.\ hard negatives. The selected run is in bold.}\label{tab:bigrid}
+\end{table}

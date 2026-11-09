@@ -1,0 +1,158 @@
+{
+  "test_resumes": 395,
+  "test_postings": 2565,
+  "shortlist": 20,
+  "precision_at_3": {
+    "TF-IDF cosine": 0.4059,
+    "MiniLM (pretrained)": 0.4169,
+    "Bi-encoder (fine-tuned)": 0.6338,
+    "Bi-encoder + MatchNet re-rank": 0.6414
+  },
+  "precision_at_3_by_category": {
+    "ACCOUNTANT": {
+      "TF-IDF cosine": 0.765,
+      "MiniLM (pretrained)": 0.882,
+      "Bi-encoder (fine-tuned)": 0.98,
+      "Bi-encoder + MatchNet re-rank": 0.961
+    },
+    "ADVOCATE": {
+      "TF-IDF cosine": 0.035,
+      "MiniLM (pretrained)": 0.123,
+      "Bi-encoder (fine-tuned)": 0.456,
+      "Bi-encoder + MatchNet re-rank": 0.579
+    },
+    "AGRICULTURE": {
+      "TF-IDF cosine": 0.111,
+      "MiniLM (pretrained)": 0.0,
+      "Bi-encoder (fine-tuned)": 0.074,
+      "Bi-encoder + MatchNet re-rank": 0.0
+    },
+    "APPAREL": {
+      "TF-IDF cosine": 0.044,
+      "MiniLM (pretrained)": 0.111,
+      "Bi-encoder (fine-tuned)": 0.022,
+      "Bi-encoder + MatchNet re-rank": 0.089
+    },
+    "ARTS": {
+      "TF-IDF cosine": 0.0,
+      "MiniLM (pretrained)": 0.0,
+      "Bi-encoder (fine-tuned)": 0.042,
+      "Bi-encoder + MatchNet re-rank": 0.146
+    },
+    "AUTOMOBILE": {
+      "TF-IDF cosine": 0.111,
+      "MiniLM (pretrained)": 0.111,
+      "Bi-encoder (fine-tuned)": 0.111,
+      "Bi-encoder + MatchNet re-rank": 0.0
+    },
+    "AVIATION": {
+      "TF-IDF cosine": 0.216,
+      "MiniLM (pretrained)": 0.118,
+      "Bi-encoder (fine-tuned)": 0.471,
+      "Bi-encoder + MatchNet re-rank": 0.431
+    },
+    "BANKING": {
+      "TF-IDF cosine": 0.137,
+      "MiniLM (pretrained)": 0.255,
+      "Bi-encoder (fine-tuned)": 0.373,
+      "Bi-encoder + MatchNet re-rank": 0.373
+    },
+    "BPO": {
+      "TF-IDF cosine": 0.417,
+      "MiniLM (pretrained)": 0.0,
+      "Bi-encoder (fine-tuned)": 0.083,
+      "Bi-encoder + MatchNet re-rank": 0.083
+    },
+    "BUSINESS-DEVELOPMENT": {
+      "TF-IDF cosine": 0.175,
+      "MiniLM (pretrained)": 0.386,
+      "Bi-encoder (fine-tuned)": 0.772,
+      "Bi-encoder + MatchNet re-rank": 0.825
+    },
+    "CHEF": {
+      "TF-IDF cosine": 0.961,
+      "MiniLM (pretrained)": 0.941,
+      "Bi-encoder (fine-tuned)": 1.0,
+      "Bi-encoder + MatchNet re-rank": 1.0
+    },
+    "CONSTRUCTION": {
+      "TF-IDF cosine": 0.296,
+      "MiniLM (pretrained)": 0.407,
+      "Bi-encoder (fine-tuned)": 0.778,
+      "Bi-encoder + MatchNet re-rank": 0.722
+    },
+    "CONSULTANT": {
+      "TF-IDF cosine": 0.105,
+      "MiniLM (pretrained)": 0.298,
+      "Bi-encoder (fine-tuned)": 0.825,
+      "Bi-encoder + MatchNet re-rank": 0.807
+    },
+    "DESIGNER": {
+      "TF-IDF cosine": 0.479,
+      "MiniLM (pretrained)": 0.417,
+      "Bi-encoder (fine-tuned)": 0.958,
+      "Bi-encoder + MatchNet re-rank": 0.896
+    },
+    "DIGITAL-MEDIA": {
+      "TF-IDF cosine": 0.452,
+      "MiniLM (pretrained)": 0.405,
+      "Bi-encoder (fine-tuned)": 0.548,
+      "Bi-encoder + MatchNet re-rank": 0.571
+    },
+    "ENGINEERING": {
+      "TF-IDF cosine": 0.596,
+      "MiniLM (pretrained)": 0.561,
+      "Bi-encoder (fine-tuned)": 0.825,
+      "Bi-encoder + MatchNet re-rank": 0.895
+    },
+    "FINANCE": {
+      "TF-IDF cosine": 0.444,
+      "MiniLM (pretrained)": 0.389,
+      "Bi-encoder (fine-tuned)": 0.741,
+      "Bi-encoder + MatchNet re-rank": 0.741
+    },
+    "FITNESS": {
+      "TF-IDF cosine": 0.019,
+      "MiniLM (pretrained)": 0.056,
+      "Bi-encoder (fine-tuned)": 0.278,
+      "Bi-encoder + MatchNet re-rank": 0.204
+    },
+    "HEALTHCARE": {
+      "TF-IDF cosine": 0.588,
+      "MiniLM (pretrained)": 0.431,
+      "Bi-encoder (fine-tuned)": 0.549,
+      "Bi-encoder + MatchNet re-rank": 0.627
+    },
+    "HR": {
+      "TF-IDF cosine": 0.833,
+      "MiniLM (pretrained)": 0.963,
+      "Bi-encoder (fine-tuned)": 0.963,
+      "Bi-encoder + MatchNet re-rank": 0.981
+    },
+    "INFORMATION-TECHNOLOGY": {
+      "TF-IDF cosine": 0.76,
+      "MiniLM (pretrained)": 0.771,
+      "Bi-encoder (fine-tuned)": 0.792,
+      "Bi-encoder + MatchNet re-rank": 0.719
+    },
+    "PUBLIC-RELATIONS": {
+      "TF-IDF cosine": 0.438,
+      "MiniLM (pretrained)": 0.292,
+      "Bi-encoder (fine-tuned)": 0.521,
+      "Bi-encoder + MatchNet re-rank": 0.5
+    },
+    "SALES": {
+      "TF-IDF cosine": 0.519,
+      "MiniLM (pretrained)": 0.407,
+      "Bi-encoder (fine-tuned)": 0.796,
+      "Bi-encoder + MatchNet re-rank": 0.926
+    },
+    "TEACHER": {
+      "TF-IDF cosine": 0.646,
+      "MiniLM (pretrained)": 0.625,
+      "Bi-encoder (fine-tuned)": 0.938,
+      "Bi-encoder + MatchNet re-rank": 0.938
+    }
+  },
+  "random_baseline": 0.0495
+}

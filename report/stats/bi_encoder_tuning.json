@@ -1,0 +1,132 @@
+{
+  "pretrained_val": {
+    "auc": 0.6445,
+    "auc_hard": 0.5394,
+    "p_at_3": 0.4287
+  },
+  "grid": [
+    {
+      "lr": 1e-05,
+      "batch_size": 32,
+      "max_seq_len": 256,
+      "best_epoch": 3,
+      "val_auc": 0.7293,
+      "val_auc_hard": 0.6279,
+      "val_p_at_3": 0.5443,
+      "minutes": 8.0
+    },
+    {
+      "lr": 3e-05,
+      "batch_size": 32,
+      "max_seq_len": 256,
+      "best_epoch": 3,
+      "val_auc": 0.771,
+      "val_auc_hard": 0.6827,
+      "val_p_at_3": 0.6093,
+      "minutes": 8.1
+    },
+    {
+      "lr": 0.0001,
+      "batch_size": 32,
+      "max_seq_len": 256,
+      "best_epoch": 3,
+      "val_auc": 0.801,
+      "val_auc_hard": 0.7235,
+      "val_p_at_3": 0.6312,
+      "minutes": 8.2
+    },
+    {
+      "lr": 3e-05,
+      "batch_size": 16,
+      "max_seq_len": 256,
+      "best_epoch": 3,
+      "val_auc": 0.7933,
+      "val_auc_hard": 0.7136,
+      "val_p_at_3": 0.6295,
+      "minutes": 9.0
+    },
+    {
+      "lr": 3e-05,
+      "batch_size": 32,
+      "max_seq_len": 128,
+      "best_epoch": 3,
+      "val_auc": 0.7507,
+      "val_auc_hard": 0.6662,
+      "val_p_at_3": 0.5789,
+      "minutes": 3.4
+    }
+  ],
+  "best": {
+    "auc": 0.801,
+    "auc_hard": 0.7235,
+    "p_at_3": 0.6312,
+    "config": "lr0.0001_bs32_len256",
+    "epoch": 3
+  },
+  "epochs": 3,
+  "best_history": {
+    "step": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170
+    ],
+    "train_loss": [
+      2.746326184272766,
+      2.386153531074524,
+      2.359228277206421,
+      2.145139050483704,
+      1.9946083307266236,
+      1.894397008419037,
+      2.0995832562446592,
+      1.9409934401512146,
+      1.8827673554420472,
+      1.9904686093330384,
+      1.8116304516792296,
+      2.010401177406311,
+      1.88632572889328,
+      1.745836353302002,
+      1.8380229353904725,
+      1.673557209968567,
+      1.9734907388687133
+    ],
+    "epoch": [
+      1,
+      2,
+      3
+    ],
+    "val": [
+      {
+        "auc": 0.7824,
+        "auc_hard": 0.6991,
+        "p_at_3": 0.6076
+      },
+      {
+        "auc": 0.7953,
+        "auc_hard": 0.7154,
+        "p_at_3": 0.6228
+      },
+      {
+        "auc": 0.801,
+        "auc_hard": 0.7235,
+        "p_at_3": 0.6312
+      }
+    ]
+  },
+  "loss": "multiple-negatives ranking (in-batch + 1 hard negative), scale 20",
+  "optimizer": "AdamW, weight decay 0.01, 10% linear warm-up, linear decay, grad clip 1.0",
+  "train_triplets_per_epoch": 1842
+}

@@ -7,9 +7,8 @@ A job seeker uploads a CV and gets the **top 3 open job postings** they can appl
 | Deliverable | Scope | Status |
 |---|---|---|
 | 1 | Problem definition, data acquisition and preprocessing | Done: [`report/Resumatch_Deliverable1.pdf`](report/Resumatch_Deliverable1.pdf) |
-| 2 | Model training (bi-encoder, cross-encoder, skill NER) | Not started |
-| 3 | Evaluation and bias audit | Not started |
-| 4 | App (Streamlit/Gradio) | Not started |
+| 2 | Model architecture, training, tuning, evaluation, error analysis, bias check | Models and evaluation done; error analysis and bias check in progress: [`report/Resumatch_Deliverable2.pdf`](report/Resumatch_Deliverable2.pdf) |
+| 3 | App (Streamlit/Gradio) | Not started |
 
 ## Current state (2026-10-24)
 
@@ -25,7 +24,10 @@ A job seeker uploads a CV and gets the **top 3 open job postings** they can appl
 - [ ] Retry `make refresh` (Rozee.pk rate-limited the scraper on 2026-10-24); the pool empties within a week without it.
 - [ ] Label the 200 gold pairs in `data/gold/` (Muaaz and Hanan, independently), then run `sample_gold_set.py score`.
 - [ ] Add `LLM_API_KEY` to `.env`, then `make synthetic label`.
-- [ ] Phase 3: fine-tune the bi-encoder, reranker and skill NER, and learn the ATS weights on the gold set.
+- [x] Phase 3: fine-tune the bi-encoder, train MatchNet, tune both (see Deliverable 2 below).
+- [ ] Muaaz: implement, run and commit `src/error_analysis.py` (due 10 Nov).
+- [ ] Hanan: implement, run and commit `src/bias_check.py` (due 10 Nov).
+- [ ] Upload the weights: `hf auth login`, then `cd src && ../.venv/bin/python weights.py upload`.
 
 Rebuilding the PDF (`make report`) is safe at any time. Don't run `make live` on its own before submitting: it drops postings that have closed since 2026-10-24, so the report numbers would shrink.
 
@@ -45,6 +47,48 @@ make report                      # make_numbers.py + build_pdf.py (headless Chro
 ```
 
 Run any step by hand from `data_scripts/`, for example `../.venv/bin/python clean_jobs.py`.
+
+## Deliverable 2: models and evaluation
+
+Two PyTorch models, both in `src/models/`:
+- **Bi-encoder** (`bi_encoder.py`): `all-MiniLM-L6-v2`, fine-tuned with a multiple-negatives ranking loss (in-batch negatives plus one mined hard negative), AdamW with warm-up. It embeds resumes and postings in one space and shortlists the 20 closest open postings.
+- **MatchNet** (`matchnet.py`): an MLP over `[u, v, |u-v|, u*v]` plus ten ATS features (skill coverage, years fit, title match, TF-IDF cosine and others). Trained with class-weighted BCE, AdamW and early stopping on validation AUC. It re-scores the shortlist; the top 3 are returned with their ATS score and apply link (`src/predict.py`, `MatchScorer.recommend`).
+
+Two evaluation tasks: **A**, our weakly labelled pairs (positive = same occupation), and **B**, 8,000 external human-labelled pairs (`cnamuangtoun/resume-job-description-fit`; Potential or Good Fit = positive). Test results:
+
+| Model | Task A AUC-ROC | Task A F1 | Task B AUC-ROC | Task B F1 |
+|---|---|---|---|---|
+| ATS score (rules) | 0.588 | 0.665 | 0.536 | 0.678 |
+| MiniLM cosine (pretrained) | 0.661 | 0.686 | 0.579 | 0.666 |
+| Bi-encoder cosine (fine-tuned) | 0.790 | 0.739 | 0.633 | 0.695 |
+| Gradient boosting (best baseline) | 0.832 | 0.764 | 0.695 | 0.708 |
+| **MatchNet** | **0.862** | **0.784** | **0.768** | **0.737** |
+
+Top-3 recommendation (share of recommended postings in the resume's occupation): 0.417 pretrained, 0.634 fine-tuned, 0.641 with MatchNet re-ranking, 0.050 random. Full numbers, tuning tables and curves are in `report/stats/*.json` and the PDF.
+
+### Running it
+
+```bash
+make weights        # download the trained weights from Hugging Face (or: make train, about 1.5 h on an M1)
+make evaluate       # test metrics, top-3 retrieval, figures
+make error-analysis # Muaaz
+make bias-check     # Hanan
+make report2        # contribution table + tables + report/Resumatch_Deliverable2.pdf
+```
+
+`make train` runs `train_bi_encoder.py` (5-run grid, best model saved to `models/bi_encoder/`), `pair_matrices.py` (embeddings and features for every pair) and `train_matchnet.py` (36-run grid per task, `models/matchnet_{weak,human}.pt`).
+
+### Model weights
+Weights are kept out of Git: `models/bi_encoder/` (88 MB) and `models/matchnet_*.pt`. They're hosted on the Hugging Face Hub at [huggingface.co/Suf-7/resumatch-models](https://huggingface.co/Suf-7/resumatch-models) (upload pending: `hf auth login`, then `cd src && ../.venv/bin/python weights.py upload`). `make weights` downloads them into `models/`.
+
+### Teammate tasks (commit from your own Git account)
+The course requires every member's code to appear in the commit history, so these two modules are yours to write, run and commit. Each stub's docstring has the full spec and the exact JSON keys the report reads.
+
+1. Pull the repo, then `make setup` and `make weights`. Get `data/processed/` from Sufyan (it's git-ignored), then run `make evaluate`, which writes `data/processed/predictions_*.parquet`.
+2. **Muaaz:** implement `src/error_analysis.py`. It writes `report/stats/error_analysis.json` and `report/figures/fig_error_analysis.*`.
+3. **Hanan:** implement `src/bias_check.py`. It writes `report/stats/bias_check.json` and `report/figures/fig_bias_check.*`.
+4. Run `make report2`; the "pending" cells in the PDF fill in automatically. If you add your figure, add an `\includegraphics` for it in `report/deliverable2.tex`, in your section. Then add your interpretation in a few sentences.
+5. Commit with your own name and email (`git config user.name` / `user.email`) and push.
 
 ## Data pipeline
 
@@ -114,8 +158,10 @@ Each URL is checked against `robots.txt`; if `robots.txt` itself can't be fetche
 data_scripts/   pipeline code (see above)
 data/           raw/ interim/ processed/ gold/   (git-ignored, reproducible)
 logs/           api_calls.jsonl, scrape log
+src/            Deliverable 2: models/, training, evaluation, error analysis, bias check
+models/         trained weights (git-ignored; Hugging Face)
 notebooks/      exploration
-report/         LaTeX source, figures, stats, PDF build
+report/         LaTeX sources (main.tex, deliverable2.tex), figures, stats, tables, PDF build
 app/            Phase 5 front end
 ```
 
