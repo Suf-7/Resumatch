@@ -417,8 +417,9 @@ other postings) in training, so it measures generalization to new postings rathe
 
 \section{Reproducibility and Model Weights}\label{sec:repro}
 Code is in \code{src/} (models in \code{src/models/}), dependencies in \code{requirements.txt}.
-Weights are not stored in Git. \code{make weights} downloads them from the GitHub Release tagged
-\code{deliverable2-weights} (linked from the README), or they can be rebuilt from scratch with:
+Weights are not stored in Git. \code{make weights} downloads them from the Hugging Face Hub
+(\code{Suf7/resumatch-models}) or the GitHub Release tagged \code{deliverable2-weights},
+or they can be rebuilt from scratch with:
 \begin{itemize}
 \item \code{make train} --- bi-encoder grid search, pair matrices, MatchNet grid search;
 \item \code{make evaluate} --- test metrics, top-3 retrieval, figures, report tables;

@@ -80,7 +80,7 @@ Error analysis (Task A): hard negatives are wrong 0.49 of the time vs. 0.12 for 
 Bias check (300 counterfactual test pairs): at most 1.7% of accept/reject decisions flip when gender, name origin or university is swapped. Mean score shifts stay below 0.02.
 
 ### Model weights
-Weights are kept out of Git (`models/bi_encoder/` is 88 MB, plus `models/matchnet_*.pt`). Download them with `make weights`, which tries the Hugging Face Hub ([Suf-7/resumatch-models](https://huggingface.co/Suf-7/resumatch-models)) and falls back to the GitHub Release [deliverable2-weights](https://github.com/Suf-7/Resumatch/releases/tag/deliverable2-weights). To publish: `hf auth login` then `cd src && ../.venv/bin/python weights.py upload`, or `python src/weights.py upload-github`.
+Weights are kept out of Git (`models/bi_encoder/` is 88 MB, plus `models/matchnet_*.pt`). Download them with `make weights`, which tries the Hugging Face Hub ([Suf7/resumatch-models](https://huggingface.co/Suf7/resumatch-models)) and falls back to the GitHub Release [deliverable2-weights](https://github.com/Suf-7/Resumatch/releases/tag/deliverable2-weights).
 
 ## Data pipeline
 

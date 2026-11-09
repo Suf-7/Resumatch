@@ -280,8 +280,9 @@ other postings) in training, so it measures generalization to new postings rathe
 (<code>make refresh</code>) before a demo.</li></ul>
 <h2 id="s14"><span class="num">14</span>Reproducibility and Model Weights</h2>
 <p>Code is in <code>src/</code> (models in <code>src/models/</code>), dependencies in <code>requirements.txt</code>.
-Weights are not stored in Git. <code>make weights</code> downloads them from the GitHub Release tagged
-<code>deliverable2-weights</code> (linked from the README), or they can be rebuilt from scratch with:</p>
+Weights are not stored in Git. <code>make weights</code> downloads them from the Hugging Face Hub
+(<code>Suf7/resumatch-models</code>) or the GitHub Release tagged <code>deliverable2-weights</code>,
+or they can be rebuilt from scratch with:</p>
 <ul><li><code>make train</code> — bi-encoder grid search, pair matrices, MatchNet grid search;</li><li><code>make evaluate</code> — test metrics, top-3 retrieval, figures, report tables;</li><li><code>make report2</code> — this PDF.</li></ul>
 <h2 id="s15"><span class="num">15</span>Contribution Table</h2>
 <p>Table&nbsp;9 is generated from <code>git log</code>, so it reflects the commit history exactly.</p>

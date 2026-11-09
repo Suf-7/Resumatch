@@ -19,7 +19,7 @@ from urllib.request import urlretrieve
 
 from config import MODELS, ROOT
 
-REPO_ID = os.environ.get("RESUMATCH_HF_REPO", "Suf-7/resumatch-models")
+REPO_ID = os.environ.get("RESUMATCH_HF_REPO", "Suf7/resumatch-models")
 GITHUB_TAG = "deliverable2-weights"
 GITHUB_TARBALL = ("https://github.com/Suf-7/Resumatch/releases/download/"
                   f"{GITHUB_TAG}/resumatch-weights.tar.gz")
@@ -38,7 +38,8 @@ def upload() -> None:
     api = HfApi()
     api.create_repo(REPO_ID, repo_type="model", exist_ok=True)
     api.upload_folder(repo_id=REPO_ID, folder_path=str(MODELS),
-                      allow_patterns=["bi_encoder/**", "matchnet_*.pt"],
+                      allow_patterns=["bi_encoder/**", "matchnet_*.pt", "README.md"],
+                      ignore_patterns=["runs/**"],
                       commit_message="Resumatch Deliverable 2 weights")
     print(f"uploaded to https://huggingface.co/{REPO_ID}")
 
