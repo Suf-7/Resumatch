@@ -1,0 +1,316 @@
+{
+  "weak": {
+    "per_category": {
+      "ACCOUNTANT": {
+        "precision": 0.7667,
+        "recall": 0.902,
+        "f1": 0.8288,
+        "support": 102
+      },
+      "ADVOCATE": {
+        "precision": 0.7941,
+        "recall": 0.9474,
+        "f1": 0.864,
+        "support": 114
+      },
+      "AGRICULTURE": {
+        "precision": 0.6562,
+        "recall": 0.7778,
+        "f1": 0.7119,
+        "support": 54
+      },
+      "APPAREL": {
+        "precision": 0.6885,
+        "recall": 0.9333,
+        "f1": 0.7925,
+        "support": 90
+      },
+      "ARTS": {
+        "precision": 0.6508,
+        "recall": 0.8542,
+        "f1": 0.7387,
+        "support": 96
+      },
+      "AUTOMOBILE": {
+        "precision": 0.56,
+        "recall": 0.7778,
+        "f1": 0.6512,
+        "support": 36
+      },
+      "AVIATION": {
+        "precision": 0.7231,
+        "recall": 0.9216,
+        "f1": 0.8103,
+        "support": 102
+      },
+      "BANKING": {
+        "precision": 0.6,
+        "recall": 0.7647,
+        "f1": 0.6724,
+        "support": 102
+      },
+      "BPO": {
+        "precision": 0.5882,
+        "recall": 0.8333,
+        "f1": 0.6897,
+        "support": 24
+      },
+      "BUSINESS-DEVELOPMENT": {
+        "precision": 0.8448,
+        "recall": 0.8596,
+        "f1": 0.8522,
+        "support": 114
+      },
+      "CHEF": {
+        "precision": 0.8444,
+        "recall": 0.7451,
+        "f1": 0.7917,
+        "support": 102
+      },
+      "CONSTRUCTION": {
+        "precision": 0.6866,
+        "recall": 0.8519,
+        "f1": 0.7603,
+        "support": 108
+      },
+      "CONSULTANT": {
+        "precision": 0.6712,
+        "recall": 0.8596,
+        "f1": 0.7538,
+        "support": 114
+      },
+      "DESIGNER": {
+        "precision": 0.9024,
+        "recall": 0.7708,
+        "f1": 0.8315,
+        "support": 96
+      },
+      "DIGITAL-MEDIA": {
+        "precision": 0.5652,
+        "recall": 0.9286,
+        "f1": 0.7027,
+        "support": 84
+      },
+      "ENGINEERING": {
+        "precision": 0.6588,
+        "recall": 0.9825,
+        "f1": 0.7887,
+        "support": 114
+      },
+      "FINANCE": {
+        "precision": 0.7797,
+        "recall": 0.8519,
+        "f1": 0.8142,
+        "support": 108
+      },
+      "FITNESS": {
+        "precision": 0.6346,
+        "recall": 0.9167,
+        "f1": 0.75,
+        "support": 90
+      },
+      "HEALTHCARE": {
+        "precision": 0.6667,
+        "recall": 0.9412,
+        "f1": 0.7805,
+        "support": 102
+      },
+      "HR": {
+        "precision": 0.8393,
+        "recall": 0.8704,
+        "f1": 0.8545,
+        "support": 108
+      },
+      "INFORMATION-TECHNOLOGY": {
+        "precision": 0.6691,
+        "recall": 0.9479,
+        "f1": 0.7845,
+        "support": 192
+      },
+      "PUBLIC-RELATIONS": {
+        "precision": 0.6875,
+        "recall": 0.9167,
+        "f1": 0.7857,
+        "support": 96
+      },
+      "SALES": {
+        "precision": 0.6944,
+        "recall": 0.9259,
+        "f1": 0.7937,
+        "support": 108
+      },
+      "TEACHER": {
+        "precision": 0.7719,
+        "recall": 0.9167,
+        "f1": 0.8381,
+        "support": 96
+      }
+    },
+    "worst_categories": [
+      "AUTOMOBILE",
+      "BANKING",
+      "BPO"
+    ],
+    "best_categories": [
+      "ADVOCATE",
+      "HR",
+      "BUSINESS-DEVELOPMENT"
+    ],
+    "error_rate_by_pair_type": {
+      "positive": 0.1165,
+      "hard_negative": 0.4899,
+      "random_negative": 0.1114
+    },
+    "false_positives": 431,
+    "false_negatives": 136,
+    "feature_means": {
+      "TP": {
+        "tfidf_cos": 0.106,
+        "skill_cov": 0.1864,
+        "skill_jacc": 0.0764,
+        "log_job_skills": 1.635,
+        "log_res_skills": 2.0503,
+        "years_fit": 0.9581,
+        "years_missing": 0.4685,
+        "title_match": 0.5887,
+        "structure": 0.7529,
+        "ats_score": 0.4472
+      },
+      "FN": {
+        "tfidf_cos": 0.102,
+        "skill_cov": 0.1375,
+        "skill_jacc": 0.0692,
+        "log_job_skills": 1.6574,
+        "log_res_skills": 1.9991,
+        "years_fit": 0.9618,
+        "years_missing": 0.3162,
+        "title_match": 0.5455,
+        "structure": 0.7482,
+        "ats_score": 0.4486
+      },
+      "TN": {
+        "tfidf_cos": 0.0788,
+        "skill_cov": 0.1256,
+        "skill_jacc": 0.0487,
+        "log_job_skills": 1.521,
+        "log_res_skills": 1.9929,
+        "years_fit": 0.9641,
+        "years_missing": 0.5172,
+        "title_match": 0.3579,
+        "structure": 0.7523,
+        "ats_score": 0.3654
+      },
+      "FP": {
+        "tfidf_cos": 0.1114,
+        "skill_cov": 0.2037,
+        "skill_jacc": 0.0805,
+        "log_job_skills": 1.722,
+        "log_res_skills": 2.1233,
+        "years_fit": 0.9558,
+        "years_missing": 0.4756,
+        "title_match": 0.5532,
+        "structure": 0.7512,
+        "ats_score": 0.442
+      }
+    },
+    "examples": [
+      {
+        "kind": "FP",
+        "resume_id": "kr_36252245",
+        "job_id": "li_3757479528",
+        "resume_category": "AVIATION",
+        "job_category": "ACCOUNTANT",
+        "score": 0.9994,
+        "skill_cov": 0.0
+      },
+      {
+        "kind": "FP",
+        "resume_id": "kr_19037403",
+        "job_id": "li_3757488552",
+        "resume_category": "FITNESS",
+        "job_category": "TEACHER",
+        "score": 0.9988,
+        "skill_cov": 1.0
+      },
+      {
+        "kind": "FP",
+        "resume_id": "kr_38007664",
+        "job_id": "li_3693587657",
+        "resume_category": "BUSINESS-DEVELOPMENT",
+        "job_category": "INFORMATION-TECHNOLOGY",
+        "score": 0.9988,
+        "skill_cov": 0.0
+      },
+      {
+        "kind": "FP",
+        "resume_id": "kr_86595128",
+        "job_id": "li_3756106689",
+        "resume_category": "FINANCE",
+        "job_category": "ACCOUNTANT",
+        "score": 0.9977,
+        "skill_cov": 0.1
+      },
+      {
+        "kind": "FP",
+        "resume_id": "kr_16962067",
+        "job_id": "li_3693056028",
+        "resume_category": "ARTS",
+        "job_category": "TEACHER",
+        "score": 0.9967,
+        "skill_cov": 0.0
+      },
+      {
+        "kind": "FN",
+        "resume_id": "kr_31710562",
+        "job_id": "li_3757732470",
+        "resume_category": "BANKING",
+        "job_category": "BANKING",
+        "score": 0.0,
+        "skill_cov": 0.125
+      },
+      {
+        "kind": "FN",
+        "resume_id": "kr_81677620",
+        "job_id": "li_3699056795",
+        "resume_category": "FINANCE",
+        "job_category": "FINANCE",
+        "score": 0.0002,
+        "skill_cov": 0.0
+      },
+      {
+        "kind": "FN",
+        "resume_id": "kr_20817322",
+        "job_id": "li_3757742119",
+        "resume_category": "CHEF",
+        "job_category": "CHEF",
+        "score": 0.0002,
+        "skill_cov": 0.2
+      },
+      {
+        "kind": "FN",
+        "resume_id": "kr_39776400",
+        "job_id": "li_3757772588",
+        "resume_category": "DESIGNER",
+        "job_category": "DESIGNER",
+        "score": 0.0002,
+        "skill_cov": 0.2
+      },
+      {
+        "kind": "FN",
+        "resume_id": "kr_68338341",
+        "job_id": "li_3757742119",
+        "resume_category": "CHEF",
+        "job_category": "CHEF",
+        "score": 0.0002,
+        "skill_cov": 0.0
+      }
+    ]
+  },
+  "human": {
+    "error_rate_by_fit": {
+      "No Fit": 0.4306,
+      "Potential Fit": 0.2252,
+      "Good Fit": 0.1332
+    }
+  }
+}

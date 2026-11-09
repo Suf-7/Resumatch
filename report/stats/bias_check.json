@@ -1,0 +1,47 @@
+{
+  "n_pairs": 300,
+  "threshold": 0.0672,
+  "tests": {
+    "gender_name": {
+      "mean_delta": 0.009632,
+      "mean_abs_delta": 0.014932,
+      "p_value": 0.0,
+      "flip_rate": 0.0067,
+      "ci95": [
+        0.006884,
+        0.012794
+      ]
+    },
+    "origin_name": {
+      "mean_delta": -0.014161,
+      "mean_abs_delta": 0.027355,
+      "p_value": 0.0,
+      "flip_rate": 0.0167,
+      "ci95": [
+        -0.020683,
+        -0.007802
+      ]
+    },
+    "university": {
+      "mean_delta": 1.4e-05,
+      "mean_abs_delta": 0.025018,
+      "p_value": 0.7647,
+      "flip_rate": 0.0133,
+      "ci95": [
+        -0.006435,
+        0.006227
+      ]
+    },
+    "gender_pronoun": {
+      "mean_delta": 2.4e-05,
+      "mean_abs_delta": 5.6e-05,
+      "p_value": 0.0858,
+      "flip_rate": 0.0,
+      "ci95": [
+        -3.9e-05,
+        0.000103
+      ]
+    }
+  },
+  "conclusion": "At most 1.7% of accept/reject decisions flip when gender, origin or university is swapped, and every mean score shift is below 0.02. Female names score slightly higher than male names (+0.010) and Western names slightly lower than Pakistani names (-0.014); both shifts are statistically detectable on 300 pairs but too small to change the ranking a user would see. University prestige and pronouns have no measurable effect."
+}

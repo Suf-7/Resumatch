@@ -171,6 +171,14 @@ def main() -> None:
     ea = load("error_analysis")
     if ea:
         w = ea["weak"]
+        fm = w["feature_means"]
+
+        pretty = {"title_match": "title match", "skill_cov": "skill coverage"}
+
+        def feat_gap(hi: str, lo: str, feats: tuple[str, ...]) -> str:
+            bits = [f"{pretty.get(f, f)} ({fm[hi][f]:.2f} vs.\\ {fm[lo][f]:.2f})" for f in feats]
+            return " and ".join(bits)
+
         m.update(ErrWorst=", ".join(SHORT.get(c, c.title()) for c in w["worst_categories"]),
                  ErrBest=", ".join(SHORT.get(c, c.title()) for c in w["best_categories"]),
                  ErrHard=f3(w["error_rate_by_pair_type"]["hard_negative"]),
@@ -178,7 +186,9 @@ def main() -> None:
                  ErrRand=f3(w["error_rate_by_pair_type"]["random_negative"]),
                  ErrPot=f3(ea["human"]["error_rate_by_fit"]["Potential Fit"]),
                  ErrNoFit=f3(ea["human"]["error_rate_by_fit"]["No Fit"]),
-                 ErrGood=f3(ea["human"]["error_rate_by_fit"]["Good Fit"]), ErrStatus="done")
+                 ErrGood=f3(ea["human"]["error_rate_by_fit"]["Good Fit"]), ErrStatus="done",
+                 ErrFeatFp=feat_gap("FP", "TN", ("title_match", "skill_cov")),
+                 ErrFeatFn=feat_gap("FN", "TP", ("skill_cov", "title_match")))
         rows = [f"{esc(SHORT.get(c, c.title()))} & {v['precision']:.3f} & {v['recall']:.3f} & "
                 f"{v['f1']:.3f} & {v['support']}\\\\"
                 for c, v in sorted(w["per_category"].items(), key=lambda kv: kv[1]["f1"])]
@@ -186,7 +196,8 @@ def main() -> None:
               rows, "MatchNet per resume category on the Task A test split (worst first).", "tab:errcat",
               size=r"\footnotesize")
     else:
-        for k in ("ErrWorst", "ErrBest", "ErrHard", "ErrPos", "ErrRand", "ErrPot", "ErrNoFit", "ErrGood"):
+        for k in ("ErrWorst", "ErrBest", "ErrHard", "ErrPos", "ErrRand", "ErrPot", "ErrNoFit",
+                  "ErrGood", "ErrFeatFp", "ErrFeatFn"):
             m[k] = PENDING
         m["ErrStatus"] = "pending"
         table("tab_error_category", "@{}L r r r r@{}", r"Resume category & Precision & Recall & F1 & Pairs",
@@ -195,9 +206,13 @@ def main() -> None:
 
     bias = load("bias_check")
     if bias:
-        rows = [f"{esc(k.replace('_', ' '))} & {v['mean_delta']:+.4f} & [{v['ci95'][0]:+.4f}, {v['ci95'][1]:+.4f}] & "
-                f"{v['mean_abs_delta']:.4f} & {v['p_value']:.3f} & {100 * v['flip_rate']:.1f}\\%\\\\"
-                for k, v in bias["tests"].items()]
+        rows = []
+        for k, v in bias["tests"].items():
+            ptxt = f"{v['p_value']:.3f}" if v["p_value"] >= 0.001 else r"$<0.001$"
+            rows.append(
+                f"{esc(k.replace('_', ' '))} & {v['mean_delta']:+.4f} & "
+                f"[{v['ci95'][0]:+.4f}, {v['ci95'][1]:+.4f}] & {v['mean_abs_delta']:.4f} & "
+                f"{ptxt} & {100 * v['flip_rate']:.1f}\\%\\\\")
         m.update(BiasN=str(bias["n_pairs"]), BiasConclusion=esc(bias.get("conclusion", "")))
     else:
         rows = [r"\multicolumn{6}{l}{\emph{Pending: run} \code{src/bias\_check.py}}\\"]

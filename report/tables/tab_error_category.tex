@@ -1,11 +1,34 @@
 \begin{table}[H]
-\centering\small
+\centering\footnotesize
 \begin{tabularx}{\linewidth}{@{}L r r r r@{}}
 \toprule
 Resume category & Precision & Recall & F1 & Pairs\\
 \midrule
-\multicolumn{5}{l}{\emph{Pending: run} \code{src/error\_analysis.py}}\\
+Automobile & 0.560 & 0.778 & 0.651 & 36\\
+Banking & 0.600 & 0.765 & 0.672 & 102\\
+BPO & 0.588 & 0.833 & 0.690 & 24\\
+Digital Media & 0.565 & 0.929 & 0.703 & 84\\
+Agriculture & 0.656 & 0.778 & 0.712 & 54\\
+Arts & 0.651 & 0.854 & 0.739 & 96\\
+Fitness & 0.635 & 0.917 & 0.750 & 90\\
+Consultant & 0.671 & 0.860 & 0.754 & 114\\
+Construction & 0.687 & 0.852 & 0.760 & 108\\
+Healthcare & 0.667 & 0.941 & 0.780 & 102\\
+IT & 0.669 & 0.948 & 0.784 & 192\\
+PR & 0.688 & 0.917 & 0.786 & 96\\
+Engineering & 0.659 & 0.983 & 0.789 & 114\\
+Chef & 0.844 & 0.745 & 0.792 & 102\\
+Apparel & 0.689 & 0.933 & 0.792 & 90\\
+Sales & 0.694 & 0.926 & 0.794 & 108\\
+Aviation & 0.723 & 0.922 & 0.810 & 102\\
+Finance & 0.780 & 0.852 & 0.814 & 108\\
+Accountant & 0.767 & 0.902 & 0.829 & 102\\
+Designer & 0.902 & 0.771 & 0.832 & 96\\
+Teacher & 0.772 & 0.917 & 0.838 & 96\\
+Business Dev. & 0.845 & 0.860 & 0.852 & 114\\
+HR & 0.839 & 0.870 & 0.855 & 108\\
+Advocate & 0.794 & 0.947 & 0.864 & 114\\
 \bottomrule
 \end{tabularx}
-\caption{MatchNet per resume category on the Task A test split.}\label{tab:errcat}
+\caption{MatchNet per resume category on the Task A test split (worst first).}\label{tab:errcat}
 \end{table}

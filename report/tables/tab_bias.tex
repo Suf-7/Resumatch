@@ -4,7 +4,10 @@
 \toprule
 Counterfactual test & Mean $\Delta$ & 95\% CI & Mean $|\Delta|$ & $p$ & Decisions flipped\\
 \midrule
-\multicolumn{6}{l}{\emph{Pending: run} \code{src/bias\_check.py}}\\
+gender name & +0.0096 & [+0.0069, +0.0128] & 0.0149 & $<0.001$ & 0.7\%\\
+origin name & -0.0142 & [-0.0207, -0.0078] & 0.0274 & $<0.001$ & 1.7\%\\
+university & +0.0000 & [-0.0064, +0.0062] & 0.0250 & 0.765 & 1.3\%\\
+gender pronoun & +0.0000 & [-0.0000, +0.0001] & 0.0001 & 0.086 & 0.0\%\\
 \bottomrule
 \end{tabularx}
 \caption{Bias check: change in MatchNet score when only one attribute of the resume is swapped (variant B minus variant A).}\label{tab:bias}

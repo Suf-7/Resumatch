@@ -348,18 +348,29 @@ the strongest are \PthreeBest.
 \section{Error Analysis}\label{sec:errors}
 \emph{Owner: Muaaz Fahad, module \code{src/error\_analysis.py}.}
 
-The error analysis breaks MatchNet's test errors down by resume category, pair type and human fit
-grade, compares the features of correct and incorrect predictions, and inspects the most confident
-mistakes (Table~\ref{tab:errcat}).
+The errors are not spread evenly. Hard negatives (postings from a related occupation) are wrong
+almost half the time (\ErrHard), while positives and random negatives sit around \ErrPos and
+\ErrRand. That is the product failure we care about: recommending a nearby but wrong role.
+
+False positives look like matches on paper: \ErrFeatFp relative to true negatives, so
+lexical overlap is treated as evidence of a match even when the occupation is wrong. The most
+confident false positives include an aviation resume scored 0.999 against an accountant posting
+and a fitness resume against a teacher posting. False negatives (same occupation, rejected) have
+slightly lower \ErrFeatFn than true positives; several chef, designer and finance pairs are scored near 0 despite
+matching categories, so the model can also be over-confident the other way.
+
+On human labels the error rate falls as the grade improves: \ErrNoFit of No~Fit pairs are accepted,
+\ErrPot of Potential~Fit and \ErrGood of Good~Fit are rejected. Potential~Fit is the ambiguous
+middle and the main source of Task~B mistakes.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_error_analysis.pdf}
+\caption{Left: MatchNet F1 by resume category on the Task~A test split (dashed line = mean).
+Right: error rate by human fit grade on Task~B.}
+\end{figure}
 
 \input{tables/tab_error_category.tex}
-
-\begin{itemize}
-\item Worst categories by F1: \ErrWorst. Best: \ErrBest.
-\item Task~A error rate by pair type: positives \ErrPos, hard negatives \ErrHard, random negatives \ErrRand.
-\item Task~B error rate by human grade: No~Fit \ErrNoFit, Potential~Fit \ErrPot, Good~Fit \ErrGood.
-\item False positives / false negatives on Task~A: \ResAFP / \ResAFN; on Task~B: \ResBFP / \ResBFN.
-\end{itemize}
 
 \section{Bias Check}\label{sec:bias}
 \emph{Owner: Hanan Ishaque, module \code{src/bias\_check.py}.}
@@ -380,6 +391,13 @@ accept/reject decision flips at the MatchNet threshold (Table~\ref{tab:bias}).
 
 \input{tables/tab_bias.tex}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{figures/fig_bias_check.pdf}
+\caption{Mean MatchNet score change (variant B minus variant A) with a 95\% bootstrap interval.
+Intervals that include 0 mean the attribute does not shift the score systematically.}
+\end{figure}
+
 Conclusion: \BiasConclusion
 
 % ---------------------------------------------------------------- wrap-up
@@ -399,8 +417,8 @@ other postings) in training, so it measures generalization to new postings rathe
 
 \section{Reproducibility and Model Weights}\label{sec:repro}
 Code is in \code{src/} (models in \code{src/models/}), dependencies in \code{requirements.txt}.
-Weights are not stored in Git; they are published on the Hugging Face Hub and linked from the
-README (\code{huggingface.co/Suf-7/resumatch-models}), or rebuilt from scratch with:
+Weights are not stored in Git. \code{make weights} downloads them from the GitHub Release tagged
+\code{deliverable2-weights} (linked from the README), or they can be rebuilt from scratch with:
 \begin{itemize}
 \item \code{make train} --- bi-encoder grid search, pair matrices, MatchNet grid search;
 \item \code{make evaluate} --- test metrics, top-3 retrieval, figures, report tables;

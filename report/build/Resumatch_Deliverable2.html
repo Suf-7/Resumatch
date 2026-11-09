@@ -41,7 +41,7 @@ figcaption, .caption { font-size: 9.3pt; margin-top: 0.4em; text-align: justify;
 figcaption b, .caption b { font-weight: bold; }
 ul, ol { margin: 0.3em 0 0.6em; padding-left: 1.5em; }
 li { margin: 0.15em 0; text-align: justify; }
-code, .code { font-family: Menlo, "SF Mono", monospace; font-size: 8.6pt; }
+code, .code { font-family: Menlo, "SF Mono", monospace; font-size: 8.6pt; hyphens: none; }
 pre { font-family: Menlo, "SF Mono", monospace; font-size: 8.2pt; line-height: 1.32; background: #f7fafc;
   border: 0.5pt solid #e2e8f0; padding: 8pt 10pt; break-inside: avoid; }
 .pipeline { display: flex; align-items: center; justify-content: center; gap: 0; margin: 0.6em 0 0.2em; }
@@ -243,11 +243,21 @@ explicit skill features shown to the user. The weakest occupations are Agricultu
 the strongest are Chef (1.00), HR (0.98), Accountant (0.96).</p>
 <h2 id="s11"><span class="num">11</span>Error Analysis</h2>
 <p><em>Owner: Muaaz Fahad, module <code>src/error_analysis.py</code>.</em></p>
-<p>The error analysis breaks MatchNet's test errors down by resume category, pair type and human fit
-grade, compares the features of correct and incorrect predictions, and inspects the most confident
-mistakes (Table&nbsp;7).</p>
-<div class="tablewrap"><table class=""><thead><tr class=""><th class="L">Resume category</th><th class="r">Precision</th><th class="r">Recall</th><th class="r">F1</th><th class="r">Pairs</th></tr></thead><tbody><tr class=""><td colspan="5" class="l"><em>Pending: run</em> <code>src/error_analysis.py</code></td></tr></tbody></table><div class="caption"><b>Table 7:</b> MatchNet per resume category on the Task A test split.</div></div>
-<ul><li>Worst categories by F1: <em>pending</em>. Best: <em>pending</em>.</li><li>Task&nbsp;A error rate by pair type: positives <em>pending</em>, hard negatives <em>pending</em>, random negatives <em>pending</em>.</li><li>Task&nbsp;B error rate by human grade: No&nbsp;Fit <em>pending</em>, Potential&nbsp;Fit <em>pending</em>, Good&nbsp;Fit <em>pending</em>.</li><li>False positives / false negatives on Task&nbsp;A: 431 / 136; on Task&nbsp;B: 369 / 161.</li></ul>
+<p>The errors are not spread evenly. Hard negatives (postings from a related occupation) are wrong
+almost half the time (0.490), while positives and random negatives sit around 0.117 and
+0.111. That is the product failure we care about: recommending a nearby but wrong role.</p>
+<p>False positives look like matches on paper: title match (0.55 vs. 0.36) and skill coverage (0.20 vs. 0.13) relative to true negatives, so
+lexical overlap is treated as evidence of a match even when the occupation is wrong. The most
+confident false positives include an aviation resume scored 0.999 against an accountant posting
+and a fitness resume against a teacher posting. False negatives (same occupation, rejected) have
+slightly lower skill coverage (0.14 vs. 0.19) and title match (0.55 vs. 0.59) than true positives; several chef, designer and finance pairs are scored near 0 despite
+matching categories, so the model can also be over-confident the other way.</p>
+<p>On human labels the error rate falls as the grade improves: 0.431 of No&nbsp;Fit pairs are accepted,
+0.225 of Potential&nbsp;Fit and 0.133 of Good&nbsp;Fit are rejected. Potential&nbsp;Fit is the ambiguous
+middle and the main source of Task&nbsp;B mistakes.</p>
+<figure><img src="../figures/fig_error_analysis.png" style="width:100%"><figcaption><b>Figure 6:</b> Left: MatchNet F1 by resume category on the Task&nbsp;A test split (dashed line = mean).
+Right: error rate by human fit grade on Task&nbsp;B.</figcaption></figure>
+<div class="tablewrap"><table class=""><thead><tr class=""><th class="L">Resume category</th><th class="r">Precision</th><th class="r">Recall</th><th class="r">F1</th><th class="r">Pairs</th></tr></thead><tbody><tr class=""><td class="L">Automobile</td><td class="r">0.560</td><td class="r">0.778</td><td class="r">0.651</td><td class="r">36</td></tr><tr class=""><td class="L">Banking</td><td class="r">0.600</td><td class="r">0.765</td><td class="r">0.672</td><td class="r">102</td></tr><tr class=""><td class="L">BPO</td><td class="r">0.588</td><td class="r">0.833</td><td class="r">0.690</td><td class="r">24</td></tr><tr class=""><td class="L">Digital Media</td><td class="r">0.565</td><td class="r">0.929</td><td class="r">0.703</td><td class="r">84</td></tr><tr class=""><td class="L">Agriculture</td><td class="r">0.656</td><td class="r">0.778</td><td class="r">0.712</td><td class="r">54</td></tr><tr class=""><td class="L">Arts</td><td class="r">0.651</td><td class="r">0.854</td><td class="r">0.739</td><td class="r">96</td></tr><tr class=""><td class="L">Fitness</td><td class="r">0.635</td><td class="r">0.917</td><td class="r">0.750</td><td class="r">90</td></tr><tr class=""><td class="L">Consultant</td><td class="r">0.671</td><td class="r">0.860</td><td class="r">0.754</td><td class="r">114</td></tr><tr class=""><td class="L">Construction</td><td class="r">0.687</td><td class="r">0.852</td><td class="r">0.760</td><td class="r">108</td></tr><tr class=""><td class="L">Healthcare</td><td class="r">0.667</td><td class="r">0.941</td><td class="r">0.780</td><td class="r">102</td></tr><tr class=""><td class="L">IT</td><td class="r">0.669</td><td class="r">0.948</td><td class="r">0.784</td><td class="r">192</td></tr><tr class=""><td class="L">PR</td><td class="r">0.688</td><td class="r">0.917</td><td class="r">0.786</td><td class="r">96</td></tr><tr class=""><td class="L">Engineering</td><td class="r">0.659</td><td class="r">0.983</td><td class="r">0.789</td><td class="r">114</td></tr><tr class=""><td class="L">Chef</td><td class="r">0.844</td><td class="r">0.745</td><td class="r">0.792</td><td class="r">102</td></tr><tr class=""><td class="L">Apparel</td><td class="r">0.689</td><td class="r">0.933</td><td class="r">0.792</td><td class="r">90</td></tr><tr class=""><td class="L">Sales</td><td class="r">0.694</td><td class="r">0.926</td><td class="r">0.794</td><td class="r">108</td></tr><tr class=""><td class="L">Aviation</td><td class="r">0.723</td><td class="r">0.922</td><td class="r">0.810</td><td class="r">102</td></tr><tr class=""><td class="L">Finance</td><td class="r">0.780</td><td class="r">0.852</td><td class="r">0.814</td><td class="r">108</td></tr><tr class=""><td class="L">Accountant</td><td class="r">0.767</td><td class="r">0.902</td><td class="r">0.829</td><td class="r">102</td></tr><tr class=""><td class="L">Designer</td><td class="r">0.902</td><td class="r">0.771</td><td class="r">0.832</td><td class="r">96</td></tr><tr class=""><td class="L">Teacher</td><td class="r">0.772</td><td class="r">0.917</td><td class="r">0.838</td><td class="r">96</td></tr><tr class=""><td class="L">Business Dev.</td><td class="r">0.845</td><td class="r">0.860</td><td class="r">0.852</td><td class="r">114</td></tr><tr class=""><td class="L">HR</td><td class="r">0.839</td><td class="r">0.870</td><td class="r">0.855</td><td class="r">108</td></tr><tr class=""><td class="L">Advocate</td><td class="r">0.794</td><td class="r">0.947</td><td class="r">0.864</td><td class="r">114</td></tr></tbody></table><div class="caption"><b>Table 7:</b> MatchNet per resume category on the Task A test split (worst first).</div></div>
 <h2 id="s12"><span class="num">12</span>Bias Check</h2>
 <p><em>Owner: Hanan Ishaque, module <code>src/bias_check.py</code>.</em></p>
 <p>A matcher must not change its decision because of who the candidate is. We test this
@@ -258,8 +268,10 @@ Deliverable&nbsp;1, so the attribute is re-inserted explicitly:</p>
 <p>Several name pairs are averaged per test. For each test we report the mean paired score difference
 with a bootstrap 95% interval, a Wilcoxon signed-rank test, and the share of pairs whose
 accept/reject decision flips at the MatchNet threshold (Table&nbsp;8).</p>
-<div class="tablewrap"><table class=""><thead><tr class=""><th class="L">Counterfactual test</th><th class="r">Mean Δ</th><th class="r">95% CI</th><th class="r">Mean |Δ|</th><th class="r"><i>p</i></th><th class="r">Decisions flipped</th></tr></thead><tbody><tr class=""><td colspan="6" class="l"><em>Pending: run</em> <code>src/bias_check.py</code></td></tr></tbody></table><div class="caption"><b>Table 8:</b> Bias check: change in MatchNet score when only one attribute of the resume is swapped (variant B minus variant A).</div></div>
-<p>Conclusion: <em>pending</em></p>
+<div class="tablewrap"><table class=""><thead><tr class=""><th class="L">Counterfactual test</th><th class="r">Mean Δ</th><th class="r">95% CI</th><th class="r">Mean |Δ|</th><th class="r"><i>p</i></th><th class="r">Decisions flipped</th></tr></thead><tbody><tr class=""><td class="L">gender name</td><td class="r">+0.0096</td><td class="r">[+0.0069, +0.0128]</td><td class="r">0.0149</td><td class="r">&lt;0.001</td><td class="r">0.7%</td></tr><tr class=""><td class="L">origin name</td><td class="r">-0.0142</td><td class="r">[-0.0207, -0.0078]</td><td class="r">0.0274</td><td class="r">&lt;0.001</td><td class="r">1.7%</td></tr><tr class=""><td class="L">university</td><td class="r">+0.0000</td><td class="r">[-0.0064, +0.0062]</td><td class="r">0.0250</td><td class="r">0.765</td><td class="r">1.3%</td></tr><tr class=""><td class="L">gender pronoun</td><td class="r">+0.0000</td><td class="r">[-0.0000, +0.0001]</td><td class="r">0.0001</td><td class="r">0.086</td><td class="r">0.0%</td></tr></tbody></table><div class="caption"><b>Table 8:</b> Bias check: change in MatchNet score when only one attribute of the resume is swapped (variant B minus variant A).</div></div>
+<figure><img src="../figures/fig_bias_check.png" style="width:82%"><figcaption><b>Figure 7:</b> Mean MatchNet score change (variant B minus variant A) with a 95% bootstrap interval.
+Intervals that include 0 mean the attribute does not shift the score systematically.</figcaption></figure>
+<p>Conclusion: At most 1.7% of accept/reject decisions flip when gender, origin or university is swapped, and every mean score shift is below 0.02. Female names score slightly higher than male names (+0.010) and Western names slightly lower than Pakistani names (-0.014); both shifts are statistically detectable on 300 pairs but too small to change the ranking a user would see. University prestige and pronouns have no measurable effect.</p>
 <h2 id="s13"><span class="num">13</span>Limitations</h2>
 <ul><li>Task&nbsp;A labels are occupation-level, so Task&nbsp;A scores overstate how well the model judges
 seniority or specific skills; Task&nbsp;B is the more honest number but is a single external dataset.</li><li>In Task&nbsp;B, test job descriptions are unseen but almost all test resumes also appear (with
@@ -268,8 +280,8 @@ other postings) in training, so it measures generalization to new postings rathe
 (<code>make refresh</code>) before a demo.</li></ul>
 <h2 id="s14"><span class="num">14</span>Reproducibility and Model Weights</h2>
 <p>Code is in <code>src/</code> (models in <code>src/models/</code>), dependencies in <code>requirements.txt</code>.
-Weights are not stored in Git; they are published on the Hugging Face Hub and linked from the
-README (<code>huggingface.co/Suf-7/resumatch-models</code>), or rebuilt from scratch with:</p>
+Weights are not stored in Git. <code>make weights</code> downloads them from the GitHub Release tagged
+<code>deliverable2-weights</code> (linked from the README), or they can be rebuilt from scratch with:</p>
 <ul><li><code>make train</code> — bi-encoder grid search, pair matrices, MatchNet grid search;</li><li><code>make evaluate</code> — test metrics, top-3 retrieval, figures, report tables;</li><li><code>make report2</code> — this PDF.</li></ul>
 <h2 id="s15"><span class="num">15</span>Contribution Table</h2>
 <p>Table&nbsp;9 is generated from <code>git log</code>, so it reflects the commit history exactly.</p>

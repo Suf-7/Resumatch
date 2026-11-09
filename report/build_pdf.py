@@ -66,7 +66,7 @@ figcaption, .caption { font-size: 9.3pt; margin-top: 0.4em; text-align: justify;
 figcaption b, .caption b { font-weight: bold; }
 ul, ol { margin: 0.3em 0 0.6em; padding-left: 1.5em; }
 li { margin: 0.15em 0; text-align: justify; }
-code, .code { font-family: Menlo, "SF Mono", monospace; font-size: 8.6pt; }
+code, .code { font-family: Menlo, "SF Mono", monospace; font-size: 8.6pt; hyphens: none; }
 pre { font-family: Menlo, "SF Mono", monospace; font-size: 8.2pt; line-height: 1.32; background: #f7fafc;
   border: 0.5pt solid #e2e8f0; padding: 8pt 10pt; break-inside: avoid; }
 .pipeline { display: flex; align-items: center; justify-content: center; gap: 0; margin: 0.6em 0 0.2em; }

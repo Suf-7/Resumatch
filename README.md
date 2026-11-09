@@ -7,7 +7,7 @@ A job seeker uploads a CV and gets the **top 3 open job postings** they can appl
 | Deliverable | Scope | Status |
 |---|---|---|
 | 1 | Problem definition, data acquisition and preprocessing | Done: [`report/Resumatch_Deliverable1.pdf`](report/Resumatch_Deliverable1.pdf) |
-| 2 | Model architecture, training, tuning, evaluation, error analysis, bias check | Models and evaluation done; error analysis and bias check in progress: [`report/Resumatch_Deliverable2.pdf`](report/Resumatch_Deliverable2.pdf) |
+| 2 | Model architecture, training, tuning, evaluation, error analysis, bias check | Done: [`report/Resumatch_Deliverable2.pdf`](report/Resumatch_Deliverable2.pdf) |
 | 3 | App (Streamlit/Gradio) | Not started |
 
 ## Current state (2026-10-24)
@@ -24,10 +24,7 @@ A job seeker uploads a CV and gets the **top 3 open job postings** they can appl
 - [ ] Retry `make refresh` (Rozee.pk rate-limited the scraper on 2026-10-24); the pool empties within a week without it.
 - [ ] Label the 200 gold pairs in `data/gold/` (Muaaz and Hanan, independently), then run `sample_gold_set.py score`.
 - [ ] Add `LLM_API_KEY` to `.env`, then `make synthetic label`.
-- [x] Phase 3: fine-tune the bi-encoder, train MatchNet, tune both (see Deliverable 2 below).
-- [ ] Muaaz: implement, run and commit `src/error_analysis.py` (due 10 Nov).
-- [ ] Hanan: implement, run and commit `src/bias_check.py` (due 10 Nov).
-- [ ] Upload the weights: `hf auth login`, then `cd src && ../.venv/bin/python weights.py upload`.
+- [x] Phase 3–4: fine-tune the bi-encoder, train MatchNet, evaluate, error analysis, bias check (see Deliverable 2 below).
 
 Rebuilding the PDF (`make report`) is safe at any time. Don't run `make live` on its own before submitting: it drops postings that have closed since 2026-10-24, so the report numbers would shrink.
 
@@ -69,26 +66,21 @@ Top-3 recommendation (share of recommended postings in the resume's occupation):
 ### Running it
 
 ```bash
-make weights        # download the trained weights from Hugging Face (or: make train, about 1.5 h on an M1)
+make weights        # download trained weights (or: make train, about 1.5 h on an M1)
 make evaluate       # test metrics, top-3 retrieval, figures
-make error-analysis # Muaaz
-make bias-check     # Hanan
+make error-analysis
+make bias-check
 make report2        # contribution table + tables + report/Resumatch_Deliverable2.pdf
 ```
 
 `make train` runs `train_bi_encoder.py` (5-run grid, best model saved to `models/bi_encoder/`), `pair_matrices.py` (embeddings and features for every pair) and `train_matchnet.py` (36-run grid per task, `models/matchnet_{weak,human}.pt`).
 
+Error analysis (Task A): hard negatives are wrong 0.49 of the time vs. 0.12 for positives and 0.11 for random negatives. Worst categories by F1: Automobile, Banking, BPO; best: Advocate, HR, Business Development. On human labels the error rate is 0.43 for No Fit, 0.23 for Potential Fit, 0.13 for Good Fit.
+
+Bias check (300 counterfactual test pairs): at most 1.7% of accept/reject decisions flip when gender, name origin or university is swapped. Mean score shifts stay below 0.02.
+
 ### Model weights
-Weights are kept out of Git: `models/bi_encoder/` (88 MB) and `models/matchnet_*.pt`. They're hosted on the Hugging Face Hub at [huggingface.co/Suf-7/resumatch-models](https://huggingface.co/Suf-7/resumatch-models) (upload pending: `hf auth login`, then `cd src && ../.venv/bin/python weights.py upload`). `make weights` downloads them into `models/`.
-
-### Teammate tasks (commit from your own Git account)
-The course requires every member's code to appear in the commit history, so these two modules are yours to write, run and commit. Each stub's docstring has the full spec and the exact JSON keys the report reads.
-
-1. Pull the repo, then `make setup` and `make weights`. Get `data/processed/` from Sufyan (it's git-ignored), then run `make evaluate`, which writes `data/processed/predictions_*.parquet`.
-2. **Muaaz:** implement `src/error_analysis.py`. It writes `report/stats/error_analysis.json` and `report/figures/fig_error_analysis.*`.
-3. **Hanan:** implement `src/bias_check.py`. It writes `report/stats/bias_check.json` and `report/figures/fig_bias_check.*`.
-4. Run `make report2`; the "pending" cells in the PDF fill in automatically. If you add your figure, add an `\includegraphics` for it in `report/deliverable2.tex`, in your section. Then add your interpretation in a few sentences.
-5. Commit with your own name and email (`git config user.name` / `user.email`) and push.
+Weights are kept out of Git (`models/bi_encoder/` is 88 MB, plus `models/matchnet_*.pt`). Download them with `make weights`, which tries the Hugging Face Hub ([Suf-7/resumatch-models](https://huggingface.co/Suf-7/resumatch-models)) and falls back to the GitHub Release [deliverable2-weights](https://github.com/Suf-7/Resumatch/releases/tag/deliverable2-weights). To publish: `hf auth login` then `cd src && ../.venv/bin/python weights.py upload`, or `python src/weights.py upload-github`.
 
 ## Data pipeline
 
