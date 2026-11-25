@@ -2,7 +2,7 @@ PY ?= .venv/bin/python
 S = data_scripts
 
 .PHONY: setup data scrape refresh synthetic clean features live ats label eda gold report all \
-        train evaluate error-analysis bias-check weights report2
+        train evaluate error-analysis bias-check weights report2 report3 app
 
 setup:
 	python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
@@ -64,5 +64,11 @@ weights:          ## download trained weights from the Hugging Face Hub instead 
 
 report2:
 	$(PY) report/contributions.py && $(PY) report/make_tables.py && $(PY) report/build_pdf.py deliverable2.tex
+
+report3:          ## final merged PDF (Deliverable 3)
+	$(PY) report/contributions.py && $(PY) report/make_tables.py && $(PY) report/build_pdf.py final.tex
+
+app:              ## Streamlit front end (http://localhost:8501)
+	$(PY) -m streamlit run app/streamlit_app.py
 
 all: data scrape clean features live ats eda gold report

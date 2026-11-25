@@ -1,0 +1,306 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{rmblue}{HTML}{2B6CB0}
+\definecolor{rmorange}{HTML}{DD6B20}
+\definecolor{rmgrey}{HTML}{4A5568}
+
+\input{numbers.tex}
+\input{numbers2.tex}
+
+\setlist{nosep,leftmargin=1.4em}
+\captionsetup{font=small,labelfont=bf}
+\titleformat{\section}{\large\bfseries\color{rmblue}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\newcommand{\phase}[1]{\vspace{0.6em}\noindent{\Large\bfseries\color{rmgrey}#1}\par\vspace{0.2em}\noindent\textcolor{rmgrey}{\rule{\linewidth}{0.6pt}}\par\vspace{0.3em}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{rmgrey}{Resumatch --- Deliverable 3}}
+\fancyhead[R]{\small\textcolor{rmgrey}{AI Semester Project, FAST-NUCES Lahore}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+{\large FAST National University of Computer and Emerging Sciences, Lahore\par}
+\vspace{0.3em}
+{\normalsize Artificial Intelligence --- Semester Project\par}
+\vspace{4.5em}
+{\fontsize{40}{46}\selectfont\bfseries\color{rmblue} Resumatch\par}
+\vspace{0.6em}
+{\Large AI-Powered Resume--Job Matching Platform\par}
+\vspace{3em}
+{\large\bfseries Deliverable 3: Final Deployment \& Technical Report\par}
+\vspace{0.4em}
+{\normalsize Phases 1--6 --- Track A, Application Development\par}
+\vspace{4em}
+\begin{tabular}{ll}
+\toprule
+\textbf{Member} & \textbf{Roll No. / Section}\\
+\midrule
+Muhammad Sufyan & 24L-2601 / BSDS-5B\\
+Muaaz Fahad & 24L-2563 / BSDS-5B\\
+Hanan Ishaque & 24L-2537 / BSDS-5B\\
+\bottomrule
+\end{tabular}
+\vspace{2.5em}
+{\normalsize\url{https://github.com/Suf-7/Resumatch}\par}
+\vspace{0.4em}
+{\normalsize\url{https://huggingface.co/Suf7/resumatch-models}\par}
+\vfill
+{\large November 2026\par}
+\end{titlepage}
+
+\tableofcontents
+\thispagestyle{fancy}
+\newpage
+
+\section{Abstract}
+Resumatch is a resume--job matching application for the Pakistani market. A job seeker uploads a
+CV and receives the three best Rozee.pk postings they can apply to, each with an apply link, a
+learned MatchNet score, a rule-based ATS score and an explicit skill-gap list. Recruiters paste a
+job description and a batch of CVs and get a ranked shortlist.
+
+We collected and cleaned \ResFinal resumes and \JobFinal postings, built \Pairs weakly labelled
+pairs and an open-jobs pool with apply URLs. Matching uses a two-stage PyTorch stack: a fine-tuned
+MiniLM bi-encoder for retrieval and MatchNet, a small MLP over embedding interactions plus ten
+interpretable features, for re-ranking. On occupation-level (weak) test pairs MatchNet reaches
+AUC-ROC \ResAAuc and F1 \ResAF; on external human-labelled fit pairs it reaches AUC-ROC \ResBAuc
+and F1 \ResBF, beating a rule-based ATS score, TF-IDF, pretrained MiniLM and gradient boosting.
+Hard negatives (related occupations) remain the main failure mode (error rate \ErrHard). A
+counterfactual bias check on 300 pairs shows at most 1.7\% of decisions flip when gender, name
+origin or university is swapped. The hosted Streamlit app (\code{app/streamlit\_app.py}) serves
+both user modes with the trained weights from Hugging Face.
+
+\phase{Phase 1: Problem Definition}
+
+\section{Problem and Product}
+Hiring is a two-sided matching problem. Candidates often send one generic CV and never learn why
+they were filtered; recruiters face more applications than they can read. Keyword ATS tools reward
+stuffing and miss capable people who phrase skills differently. Our data confirms a vocabulary
+gap: \SkillsJobOnly of the \SkillsUniqJobs distinct skills in postings never appear in any resume.
+
+\paragraph{Product.} Track~A application. A candidate uploads a resume and sees the top three
+\emph{open} postings with apply links, MatchNet and ATS scores, and matched/missing skills. A
+recruiter uploads a job description plus several CVs and gets a ranked shortlist. Matching and
+ranking models are trained by us; LLMs are used only for optional labelling and synthetic data.
+
+\paragraph{Audience.} Pakistani graduates and early-career applicants (Rozee.pk), and recruiters
+at SMEs who want an explained shortlist rather than a black-box score.
+
+\phase{Phase 2: Data Foundations}
+
+\section{Data Collection and Cleaning}
+\begin{itemize}
+\item Resumes: Kaggle Resume Dataset + Updated Resume Dataset $\rightarrow$ \ResFinal cleaned
+(\ResCats categories), PII masked.
+\item Postings: LinkedIn Job Postings 2023--24 (\JobFinalLI, training only) and Rozee.pk
+(\JobFinalRZ) with apply URLs and closing dates for the live pool.
+\item Skills: ESCO v1.1.2 gazetteer (\EscoSkills skills).
+\item External evaluation: human-labelled resume--JD fit pairs (\FitPairsTrain + \FitPairsTest).
+\end{itemize}
+Cleaning drops empty/non-English text, repairs encoding, removes exact and near-duplicates
+(TF-IDF $> 0.95$), handles length outliers and masks email, phone and URLs. Features (train-only
+fit): TF-IDF, multi-hot skills, years of experience, standardized numerics, MiniLM embeddings.
+Splits are 70/15/15 \emph{by resume and by posting}. Pairs: \PairsPos same-category positives,
+\PairsHard hard negatives, \PairsRand random negatives.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.86\linewidth]{figures/fig_category_distribution.pdf}
+\caption{Resume and posting category distributions after cleaning.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\linewidth]{figures/fig_top_skills.pdf}
+\caption{Top skills in postings versus resumes: resumes over-emphasize generic skills.}
+\end{figure}
+
+The baseline ATS score (skills 0.50, experience 0.20, title 0.15, structure 0.15) reaches AUC
+\AtsAucRand against random negatives but only \AtsAucHard against hard negatives --- so a learned
+ranker is necessary.
+
+\phase{Phase 3: Model Architecture \& Training}
+
+\section{Two-Stage Matcher}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_architecture.pdf}
+\caption{Stage~1 bi-encoder retrieval; Stage~2 MatchNet re-ranking with ATS features.}
+\end{figure}
+
+\paragraph{Bi-encoder.} \code{all-MiniLM-L6-v2} (6 layers, 384-d, mean pool, L2). Loss: multiple-
+negatives ranking with in-batch negatives plus one mined hard negative (scale 20). Optimizer:
+AdamW, 10\% warm-up, linear decay, grad clip 1.0. Selected: lr \BiBestLr, batch \BiBestBs, length
+\BiBestLen (val AUC-hard \BiAucHard, P@3 \BiPthree).
+
+\paragraph{MatchNet.} Input $[u,v,|u-v|,u \odot v]$ plus ten scalar features
+$\rightarrow$ Linear--ReLU--Dropout branches $\rightarrow$ logit. Loss: class-weighted BCE.
+Optimizer: AdamW, early stop on val AUC (patience 6). Selected Task~A: lr \MnALr, batch \MnABs,
+dropout \MnADrop, $H=\MnAHidden$ (val AUC \MnAValAuc). Task~B: lr \MnBLr, batch \MnBBs, dropout
+\MnBDrop, $H=\MnBHidden$ (val AUC \MnBValAuc).
+
+\input{tables/tab_bi_grid.tex}
+\input{tables/tab_mn_grid.tex}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_bi_encoder_curves.pdf}
+\caption{Bi-encoder training loss and validation AUC (hard negatives).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_matchnet_curves.pdf}
+\caption{MatchNet loss and accuracy/AUC; dashed line = early-stopping epoch.}
+\end{figure}
+
+\phase{Phase 4: Evaluation \& Analysis}
+
+\section{Validation and Metrics}
+Fixed entity-level train/val/test (not K-fold): fine-tuning the transformer many times is too
+expensive, and with thousands of pairs a held-out split already gives tight bootstrap CIs.
+Thresholds maximize validation F1 and are frozen for test. We report Precision, Recall, F1,
+AUC-ROC and PR-AUC because the product problem is heavily imbalanced even when our constructed
+test splits are near-balanced.
+
+\input{tables/tab_results_weak.tex}
+\input{tables/tab_results_human.tex}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_roc.pdf}
+\caption{Test ROC curves for Task~A (left) and Task~B (right).}
+\end{figure}
+
+\paragraph{Retrieval.} Precision@3 on the test job pool: pretrained \PthreePre, fine-tuned
+\PthreeFt, fine-tuned + MatchNet re-rank \PthreeRerank (random \PthreeRandom).
+
+\input{tables/tab_retrieval.tex}
+
+\paragraph{Error analysis.} Hard-negative error rate \ErrHard versus \ErrPos on positives and
+\ErrRand on random negatives. Worst categories: \ErrWorst; best: \ErrBest. Task~B errors fall with
+human grade (No~Fit \ErrNoFit, Potential \ErrPot, Good \ErrGood).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_error_analysis.pdf}
+\caption{Per-category F1 (Task~A) and error rate by human grade (Task~B).}
+\end{figure}
+
+\paragraph{Bias check.} On \BiasN counterfactual pairs, mean score shifts stay below 0.02 and at
+most 1.7\% of decisions flip. \BiasConclusion
+
+\input{tables/tab_bias.tex}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{figures/fig_bias_check.pdf}
+\caption{Bias check: mean score change with 95\% bootstrap intervals.}
+\end{figure}
+
+\phase{Phase 5: Application}
+
+\section{Streamlit Front End}\label{sec:app}
+The production interface is a Streamlit app in \code{app/streamlit\_app.py}. It loads the
+fine-tuned bi-encoder and MatchNet once (\code{st.cache\_resource}) and exposes two modes:
+
+\begin{itemize}
+\item \textbf{Candidate:} upload a PDF/TXT/DOCX resume (or paste text). The app embeds the resume,
+shortlists 20 Rozee.pk postings by cosine similarity, re-ranks with MatchNet and shows the top
+three with apply URL, MatchNet \%, ATS score (0--100) and matched/missing skills.
+\item \textbf{Recruiter:} paste a job description and upload several resumes; MatchNet ranks the
+batch with the same explanations.
+\end{itemize}
+
+If every posting in \code{jobs\_live.parquet} has closed, the app falls back to the full scraped
+Rozee.pk pool and shows a demo warning; \code{make refresh} updates the pool. Run:
+
+\begin{verbatim}
+make weights
+.venv/bin/streamlit run app/streamlit_app.py
+\end{verbatim}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_app_demo.pdf}
+\caption{Candidate-mode result card layout: MatchNet and ATS scores, company, and skill gaps
+for an IT resume against the Rozee.pk demo pool.}
+\end{figure}
+
+\paragraph{Integration.} Inference goes through \code{src/predict.py} (\code{MatchScorer}): the
+same code path used in evaluation, so the numbers in Phase~4 and the app stay aligned. PDF text
+is extracted with \code{pypdf}; DOCX via the Open XML zip.
+
+\phase{Phase 6: Final Documentation \& Reproducibility}
+
+\section{Limitations}
+\begin{itemize}
+\item Task~A labels are occupation-level; Task~B is the more honest fit judgement but a single
+external dataset.
+\item Hard negatives (related occupations) remain near chance for MatchNet.
+\item Live postings expire within about a week; the demo pool may show closed apply links until
+refreshed.
+\item Inputs truncate at \BiBestLen word pieces.
+\end{itemize}
+
+\section{Reproducibility}
+\begin{itemize}
+\item Code: \url{https://github.com/Suf-7/Resumatch} (\code{src/}, \code{app/}, \code{data\_scripts/}).
+\item Dependencies: \code{requirements.txt}; \code{make setup}.
+\item Weights: \url{https://huggingface.co/Suf7/resumatch-models} via \code{make weights}
+(GitHub Release fallback \code{deliverable2-weights}).
+\item Train: \code{make train}; evaluate: \code{make evaluate}; this PDF: \code{make report3}.
+\end{itemize}
+
+\section{Contribution Table}
+\input{tables/tab_contrib.tex}
+
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}l L@{}}
+\toprule
+Member & Responsibility across the project\\
+\midrule
+Muhammad Sufyan & Data pipeline, bi-encoder and MatchNet, evaluation, Streamlit app, reports\\
+Muaaz Fahad & Error analysis (\code{src/error\_analysis.py})\\
+Hanan Ishaque & Bias check (\code{src/bias\_check.py})\\
+\bottomrule
+\end{tabularx}
+\caption{Module ownership for the final submission.}
+\end{table}
+
+\clearpage
+\section{Appendix: Full MatchNet Grid}
+\input{tables/tab_mn_full.tex}
+
+\begin{thebibliography}{9}\small
+\bibitem{kaggle-resume} snehaanbhawal. \emph{Resume Dataset}. Kaggle.
+\bibitem{kaggle-linkedin} arshkon. \emph{LinkedIn Job Postings (2023--2024)}. Kaggle.
+\bibitem{hf-fit} \emph{resume-job-description-fit}. Hugging Face Datasets.
+\bibitem{esco} European Commission. \emph{ESCO} v1.1.2.
+\bibitem{sbert} N.~Reimers and I.~Gurevych. Sentence-BERT. \emph{EMNLP}, 2019.
+\end{thebibliography}
+
+\end{document}

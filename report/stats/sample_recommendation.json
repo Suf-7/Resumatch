@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "n_pool": 348,
+    "used_expired": true,
+    "shortlist": 20,
+    "resume_years": 27.0,
+    "resume_skills": [
+      "computer technology",
+      "product comprehension",
+      "Microsoft Visio",
+      "distributed directory information services",
+      "data storage",
+      "risk management",
+      "Linux",
+      "business model",
+      "sensors",
+      "electrical wiring diagrams",
+      "desktop publishing",
+      "Adobe Photoshop",
+      "Adobe Illustrator",
+      "HTML"
+    ]
+  },
+  "results": [
+    {
+      "title": "IT Associate",
+      "company": "Skylight Accounting and Bookkeeping",
+      "location": "Karachi",
+      "match": 1.0,
+      "ats_score": 39.8,
+      "matched_skills": [
+        "HTML",
+        "Linux"
+      ],
+      "missing_skills": [
+        "PHP",
+        "MySQL",
+        "Flutter",
+        "Python (computer programming)",
+        "Git",
+        "operating systems"
+      ],
+      "url": "https://www.rozee.pk/it-associate-karachi-jobs-1923098"
+    },
+    {
+      "title": "LogicMonitor Administrator",
+      "company": "XTIUM",
+      "location": "Islamabad",
+      "match": 0.999,
+      "ats_score": 18.2,
+      "matched_skills": [
+        "Linux"
+      ],
+      "missing_skills": [
+        "artificial intelligence",
+        "Groovy",
+        "Java (computer programming)",
+        "Python (computer programming)",
+        "Cisco",
+        "Microsoft Azure"
+      ],
+      "url": "https://www.rozee.pk/logicmonitor-administrator-islamabad-jobs-1917960"
+    },
+    {
+      "title": "Core Network Engineer (Arista)",
+      "company": "Systems Limited",
+      "location": "Karachi",
+      "match": 0.999,
+      "ats_score": 38.8,
+      "matched_skills": [],
+      "missing_skills": [
+        "migration",
+        "Microsoft Azure",
+        "Google Cloud Platform",
+        "firmware",
+        "alter management",
+        "Cisco"
+      ],
+      "url": "https://www.rozee.pk/core-network-engineer-arista-karachi-jobs-1923191"
+    }
+  ]
+}

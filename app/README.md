@@ -1,8 +1,22 @@
 # Resumatch app (Phase 5)
 
-Streamlit/Gradio front end for the two user modes:
+Streamlit front end for real-time inference with the fine-tuned bi-encoder and MatchNet.
 
-- **Candidate mode**: upload a CV and get a match score, skill-gap report, ranked jobs, an ATS score, and rewritten bullets.
-- **Recruiter mode**: upload a job description plus a batch of CVs and get a ranked shortlist with explanations.
+## Run
 
-Not started yet. The data pipeline for Deliverable 1 lives in `../data_scripts/`.
+From the **repository root**:
+
+```bash
+make setup          # once
+make weights        # download models into models/ (if missing)
+.venv/bin/streamlit run app/streamlit_app.py
+```
+
+Opens at http://localhost:8501.
+
+## Modes
+
+- **Candidate**: upload a resume (PDF / TXT / DOCX) → top-3 Rozee.pk postings with apply link, MatchNet match %, ATS score (0–100), matched and missing skills.
+- **Recruiter**: paste a job description + upload several resumes → ranked shortlist with the same scores.
+
+If every posting in `data/processed/jobs_live.parquet` has expired, the app falls back to the full scraped Rozee.pk pool and shows a demo warning. Refresh with `make refresh`.
